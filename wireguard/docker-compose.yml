@@ -1,13 +1,10 @@
 services:
   wireguard:
-    image: ghcr.io/wg-easy/wg-easy
-    env_file:
-      - .env
-      - ../.env
+    image: ghcr.io/wg-easy/wg-easy:latest
     user: "${UID:-0}:${GID:-0}"
     environment:
-      - WG_HOST=${WG_HOST}
-      - PASSWORD_HASH=${PASSWORD_HASH} # docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'changeme'
+      - WG_HOST=${WG_HOST:?error}
+      - PASSWORD_HASH=${PASSWORD_HASH:?error} # docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'admin'
       - ENABLE_PROMETHEUS_METRICS=true
     cap_add:
       - NET_ADMIN

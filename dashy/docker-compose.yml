@@ -1,8 +1,6 @@
 services:
   dashy:
     image: lissy93/dashy:latest
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     environment:
       - NODE_ENV=production

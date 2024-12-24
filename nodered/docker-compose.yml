@@ -1,11 +1,9 @@
 services:
   nodered:
     image: nodered/node-red:latest
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-Europe/Paris}
     volumes:
       - data:/data
     networks:

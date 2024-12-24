@@ -1,13 +1,11 @@
 services:
   pihole:
     image: pihole/pihole:latest
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     secrets:
       - pihole_webpassword
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-Europe/Paris}
       - WEBPASSWORD_FILE=/run/secrets/pihole_webpassword
     volumes:
       - config:/etc/pihole

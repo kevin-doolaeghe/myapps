@@ -1,11 +1,9 @@
 services:
   duckdns:
     image: lscr.io/linuxserver/duckdns
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-Europe/Paris}
       - FILE__SUBDOMAINS=/run/secrets/duckdns_subdomains
       - FILE__TOKEN=/run/secrets/duckdns_token
       - LOG_FILE=false

@@ -1,14 +1,12 @@
 services:
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     privileged: true
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-Europe/Paris}
     devices:
-      - ${DEVICE}:/dev/ttyUSB0
+      - ${SKYCONNECT_DEV:-/dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_0e9226d6be96ed11b33dc698a7669f5d-if00-port0}:/dev/ttyUSB0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - config:/config

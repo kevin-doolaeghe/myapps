@@ -1,12 +1,10 @@
 services:
   duplicati:
     image: duplicati/duplicati:latest
-    env_file:
-      - ../.env
     user: "${UID:-0}:${GID:-0}"
     environment:
-      - SETTINGS_ENCRYPTION_KEY="<real encryption key>"
-      - DUPLICATI__WEBSERVICE_PASSWORD="<ui password>"
+      - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
+      - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD:-admin}
     volumes:
       - data:/data
     networks:
