@@ -1,15 +1,19 @@
 services:
   pihole:
     image: pihole/pihole:latest
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
+    secrets:
+      - pihole_webpassword
     environment:
-      - TZ=${TZ} # cat /etc/timezone
-      - WEBPASSWORD=${WEBPASSWORD}
+      - TZ=${TZ}
+      - WEBPASSWORD_FILE=/run/secrets/pihole_webpassword
     volumes:
       - config:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
     ports:
-      - 53:53
+      - "53:53"
     networks:
       - local
     deploy:
@@ -19,6 +23,10 @@ services:
         condition: on-failure
       placement:
         constraints: [node.role == manager]
+
+secrets:
+  pihole_webpassword:
+    external: true
 
 volumes:
   config:

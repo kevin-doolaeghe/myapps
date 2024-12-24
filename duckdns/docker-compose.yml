@@ -1,12 +1,17 @@
 services:
   duckdns:
     image: lscr.io/linuxserver/duckdns
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     environment:
-      - TZ=${TZ} # cat /etc/timezone
-      - SUBDOMAINS=${SUBDOMAINS}
-      - TOKEN=${TOKEN}
+      - TZ=${TZ}
+      - FILE__SUBDOMAINS=/run/secrets/duckdns_subdomains
+      - FILE__TOKEN=/run/secrets/duckdns_token
       - LOG_FILE=false
+    secrets:
+      - duckdns_subdomains
+      - duckdns_token
     volumes:
       - config:/config
     networks:
@@ -20,6 +25,8 @@ services:
         constraints: [node.role == manager]
 
 secrets:
+  duckdns_subdomains:
+    external: true
   duckdns_token:
     external: true
 
@@ -28,3 +35,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

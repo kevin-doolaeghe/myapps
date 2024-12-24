@@ -1,12 +1,14 @@
 services:
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     privileged: true
     environment:
-      - TZ=${TZ} # cat /etc/timezone
+      - TZ=${TZ}
     devices:
-      - ${DEVICE}:/dev/ttyUSB0 # ls -l /dev/serial/by-id/
+      - ${DEVICE}:/dev/ttyUSB0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - config:/config
@@ -25,3 +27,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

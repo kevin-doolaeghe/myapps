@@ -1,7 +1,11 @@
 services:
   dashy:
     image: lissy93/dashy:latest
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
+    environment:
+      - NODE_ENV=production
     volumes:
       - config:/app/public
     networks:
@@ -17,3 +21,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

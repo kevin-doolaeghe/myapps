@@ -1,7 +1,9 @@
 services:
   duplicati:
     image: duplicati/duplicati:latest
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     environment:
       - SETTINGS_ENCRYPTION_KEY="<real encryption key>"
       - DUPLICATI__WEBSERVICE_PASSWORD="<ui password>"
@@ -20,3 +22,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

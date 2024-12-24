@@ -1,9 +1,11 @@
 services:
   nodered:
     image: nodered/node-red:latest
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     environment:
-      - TZ=${TZ} # cat /etc/timezone
+      - TZ=${TZ}
     volumes:
       - data:/data
     networks:
@@ -19,3 +21,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

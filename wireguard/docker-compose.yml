@@ -1,7 +1,10 @@
 services:
   wireguard:
     image: ghcr.io/wg-easy/wg-easy
-    user: "${UID}:${GID}"
+    env_file:
+      - .env
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     environment:
       - WG_HOST=${WG_HOST}
       - PASSWORD_HASH=${PASSWORD_HASH} # docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'changeme'
@@ -31,3 +34,5 @@ volumes:
 
 networks:
   local:
+    driver: overlay
+    attachable: true

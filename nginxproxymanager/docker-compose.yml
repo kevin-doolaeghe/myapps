@@ -1,7 +1,9 @@
 services:
   nginxproxymanager:
     image: jc21/nginx-proxy-manager:latest
-    user: "${UID}:${GID}"
+    env_file:
+      - ../.env
+    user: "${UID:-0}:${GID:-0}"
     ports:
       - "80:80"
       - "443:443"
