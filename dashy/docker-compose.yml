@@ -1,0 +1,19 @@
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    user: "${UID}:${GID}"
+    volumes:
+      - config:/app/public
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  config:
+
+networks:
+  local:

@@ -1,0 +1,22 @@
+services:
+  duplicati:
+    image: duplicati/duplicati:latest
+    user: "${UID}:${GID}"
+    environment:
+      - SETTINGS_ENCRYPTION_KEY="<real encryption key>"
+      - DUPLICATI__WEBSERVICE_PASSWORD="<ui password>"
+    volumes:
+      - data:/data
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  data:
+
+networks:
+  local:

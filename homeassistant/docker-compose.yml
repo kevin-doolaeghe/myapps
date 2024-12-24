@@ -1,0 +1,27 @@
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    user: "${UID}:${GID}"
+    privileged: true
+    environment:
+      - TZ=${TZ} # cat /etc/timezone
+    devices:
+      - ${DEVICE}:/dev/ttyUSB0 # ls -l /dev/serial/by-id/
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - config:/config
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  config:
+
+networks:
+  local:

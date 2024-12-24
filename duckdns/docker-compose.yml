@@ -1,0 +1,30 @@
+services:
+  duckdns:
+    image: lscr.io/linuxserver/duckdns
+    user: "${UID}:${GID}"
+    environment:
+      - TZ=${TZ} # cat /etc/timezone
+      - SUBDOMAINS=${SUBDOMAINS}
+      - TOKEN=${TOKEN}
+      - LOG_FILE=false
+    volumes:
+      - config:/config
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+secrets:
+  duckdns_token:
+    external: true
+
+volumes:
+  config:
+
+networks:
+  local:

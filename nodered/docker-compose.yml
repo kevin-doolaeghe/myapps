@@ -1,0 +1,21 @@
+services:
+  nodered:
+    image: nodered/node-red:latest
+    user: "${UID}:${GID}"
+    environment:
+      - TZ=${TZ} # cat /etc/timezone
+    volumes:
+      - data:/data
+    networks:
+      - local
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  data:
+
+networks:
+  local:
