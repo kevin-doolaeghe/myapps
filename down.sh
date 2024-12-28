@@ -9,9 +9,8 @@ fi
 # Trim trailing slashes from the stack name
 stack=$(echo "$1" | sed 's:/*$::')
 
-# Check if the stack is running
+# Stop the stack if it is running
 if docker stack ls | grep -qw "$stack"; then
-    # Attempt to remove the stack
     if docker stack rm "$stack"; then
         echo "Stack $stack stopped."
         exit 0

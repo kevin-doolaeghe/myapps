@@ -10,9 +10,8 @@ fi
 stack=$(echo "$1" | sed 's:/*$::')
 compose_file="$stack/docker-compose.yml"
 
-# Check if the docker-compose.yml file exists
+# Start the stack if the docker-compose.yml file exists
 if [ -f "$compose_file" ]; then
-    # Attempt to deploy the stack
     if docker stack deploy -c "$compose_file" "$stack"; then
         echo "Started $stack stack."
         exit 0
