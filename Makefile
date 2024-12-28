@@ -10,20 +10,20 @@ all: start
 # Initialize Docker environment
 init:
 	@echo "Initializing Docker environment..."
-	@sh init.sh
+	@bash init.sh
 
 # Start Docker stacks
 start: init
 	@echo "Starting Docker stacks..."
 	@for stack in $(STACKS); do \
-		sh up.sh $$stack \
+		bash up.sh $$stack \
 	done
 
 # Stop Docker stacks
 stop:
 	@echo "Stopping Docker stacks..."
 	@for stack in $(STACKS); do \
-		sh down.sh $$stack \
+		bash down.sh $$stack \
 	done
 
 # Clean Docker environment
