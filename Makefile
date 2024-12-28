@@ -15,14 +15,14 @@ init:
 # Start Docker stacks
 start: init
 	@echo "Starting Docker stacks..."
-	@for stack in $(STACKS); do \
+	for stack in $(STACKS); do \
 		sh up.sh $$stack \
 	done
 
 # Stop Docker stacks
 stop:
 	@echo "Stopping Docker stacks..."
-	@for stack in $(STACKS); do \
+	for stack in $(STACKS); do \
 		sh down.sh $$stack \
 	done
 
