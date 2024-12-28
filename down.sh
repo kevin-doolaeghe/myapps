@@ -1,15 +1,25 @@
 #!/bin/sh
 
-if [ $# -ne 1 ]; then
- echo "Usage: ./down.sh <stack>"
- exit 0
+# Check if exactly one argument is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: ./down.sh <stack>"
+    exit 1
 fi
 
+# Trim trailing slashes from the stack name
 stack=$(echo "$1" | sed 's:/*$::')
 
-if docker stack ls | grep -w $stack > /dev/null; then
-    docker stack rm $stack && echo "Stack $stack stopped."
+# Check if the stack is running
+if docker stack ls | grep -qw "$stack"; then
+    # Attempt to remove the stack
+    if docker stack rm "$stack"; then
+        echo "Stack $stack stopped."
+        exit 0
+    else
+        echo "Failed to stop stack $stack."
+        exit 1
+    fi
 else
     echo "The stack $stack is not running."
+    exit 1
 fi
-exit 1
