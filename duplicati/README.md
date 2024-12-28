@@ -1,6 +1,6 @@
-# Duplicati
+# Duplicati backup manager
 
-:triangular_flag_on_post: **Duplicati** application package.
+:triangular_flag_on_post: Setup the **Duplicati** backup manager stack.
 
 ## Author
 
@@ -9,10 +9,10 @@
 ## Setup
 
 ```
-sudo docker stack deploy -c docker-compose.yml -p duplicati
+sudo docker stack deploy -c docker-compose.yml duplicati
 ```
 
-:warning: This program require a docker instance with **Swarm** mode enabled to be executed.
+:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
 
 ## Setup external storage for backups
 
@@ -46,7 +46,11 @@ ls /mnt/data
 ```
 :memo: The drive will now be automatically mounted to `/mnt/data` after startup.
 
+## Web access
+
+Duplicati's web interface is accessible via port `8200`.
+
 ## References
 
 * [Duplicati website](https://duplicati.com/)
-* [Duplicati image from Docker Hub](https://hub.docker.com/r/duplicati/duplicati)
+* [Duplicati image on Docker Hub](https://hub.docker.com/r/duplicati/duplicati)

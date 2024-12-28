@@ -1,0 +1,27 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    volumes:
+      - homepage_config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - ${DOCKER_NETWORK:?error}
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.homepage.rule=Host(`${TRAEFIK_DOMAIN_NAME:?error}`) || Host(`homepage.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.routers.homepage.entrypoints=websecure"
+        - "traefik.http.routers.homepage.tls.certresolver=dnschallenge"
+        - "traefik.http.services.homepage.loadbalancer.server.port=3000"
+
+volumes:
+  homepage_config:
+
+networks:
+  ${DOCKER_NETWORK:?error}:
+    external: true

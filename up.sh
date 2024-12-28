@@ -1,13 +1,16 @@
 #!/bin/sh
 
 if [ $# -ne 1 ]; then
- echo "Usage: ./up.sh <app>"
- exit 1
+ echo "Usage: ./up.sh <stack>"
+ exit 0
 fi
 
-app=$(echo "$1" | sed 's:/*$::')
+stack=$(echo "$1" | sed 's:/*$::')
+compose_file="$stack/docker-compose.yml"
 
-file="$app/docker-compose.yml"
-docker stack deploy -c $file -d $app
-
-exit 0
+if [ -f $compose_file ]; then
+    docker stack deploy -c $compose_file $stack && echo "Started $stack stack."
+else
+    echo "No docker-compose.yml file found for $stack."
+fi
+exit 1

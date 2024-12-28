@@ -1,6 +1,6 @@
 # Pi-Hole
 
-:triangular_flag_on_post: **Pi-Hole** application package.
+:triangular_flag_on_post: Setup the **Pi-Hole** stack.
 
 ## Author
 
@@ -9,10 +9,10 @@
 ## Setup
 
 ```
-sudo docker stack deploy -c docker-compose.yml -p pihole
+sudo docker stack deploy -c docker-compose.yml pihole
 ```
 
-:warning: This program require a docker instance with **Swarm** mode enabled to be executed.
+:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
 
 ## Web access
 
@@ -24,6 +24,6 @@ Pi-Hole's web interface is accessible via port `80`.
 
 ## References
 
-* [Pi-Hole](https://pi-hole.net/)
-* [Docker Pi-Hole](https://github.com/pi-hole/docker-pi-hole/)
+* [Pi-Hole website](https://pi-hole.net/)
+* [Pi-Hole repository on Github](https://github.com/pi-hole/docker-pi-hole/)
 * [Ubuntu - How to free up port 53, used by `systemd-resolved`](https://www.linuxuprising.com/2020/07/ubuntu-how-to-free-up-port-53-used-by.html)

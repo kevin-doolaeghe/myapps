@@ -1,24 +1,29 @@
 services:
   duplicati:
     image: duplicati/duplicati:latest
-    user: "${UID:-0}:${GID:-0}"
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
       - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD:-admin}
     volumes:
       - data:/data
     networks:
-      - local
+      - ${DOCKER_NETWORK:?error}
     deploy:
       mode: replicated
       replicas: 1
       restart_policy:
         condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.duplicati.rule=Host(`duplicati.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.routers.duplicati.entrypoints=websecure"
+        - "traefik.http.routers.duplicati.tls.certresolver=dnschallenge"
+        - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
 
 volumes:
   data:
 
 networks:
-  local:
-    driver: overlay
-    attachable: true
+  ${DOCKER_NETWORK:?error}:
+    external: true

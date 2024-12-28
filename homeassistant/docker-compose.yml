@@ -1,29 +1,35 @@
 services:
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
-    user: "${UID:-0}:${GID:-0}"
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     privileged: true
     environment:
-      - TZ=${TZ:-Europe/Paris}
+      - TZ=${DOCKER_TZ:?error}
     devices:
       - ${SKYCONNECT_DEV:-/dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_0e9226d6be96ed11b33dc698a7669f5d-if00-port0}:/dev/ttyUSB0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - config:/config
     networks:
-      - local
+      - ${DOCKER_NETWORK:?error}
     deploy:
       mode: replicated
       replicas: 1
       restart_policy:
         condition: on-failure
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.routers.homeassistant.entrypoints=websecure"
+        - "traefik.http.routers.homeassistant.tls.certresolver=dnschallenge"
+        - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
 
 volumes:
   config:
 
 networks:
-  local:
-    driver: overlay
-    attachable: true
+  ${DOCKER_NETWORK:?error}:
+    external: true

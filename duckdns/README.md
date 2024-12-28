@@ -1,6 +1,6 @@
-# Duck DNS
+# Duck DNS DDNS service
 
-:triangular_flag_on_post: **Duck DNS** application package.
+:triangular_flag_on_post: Setup the **Duck DNS** DDNS stack.
 
 ## Author
 
@@ -9,16 +9,12 @@
 ## Setup
 
 ```
-sudo docker stack deploy -c docker-compose.yml -p duckdns
+docker stack deploy -c docker-compose.yml duckdns
 ```
 
-:warning: This program require a docker instance with **Swarm** mode enabled to be executed.
-
-## Configuration
-
-Change the settings in the `.env` file to configure the Duck DNS DDNS service.
+:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
 
 ## References
 
 * [Duck DNS website](https://www.duckdns.org/)
-* [Duck DNS for Docker - DDNS service](https://hub.docker.com/r/linuxserver/duckdns)
+* [Duck DNS image on Docker Hub](https://hub.docker.com/r/linuxserver/duckdns)

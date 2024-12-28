@@ -1,6 +1,6 @@
 # Portainer
 
-:triangular_flag_on_post: **Portainer** application package.
+:triangular_flag_on_post: Setup the **Portainer** stack.
 
 ## Author
 
@@ -9,10 +9,10 @@
 ## Setup
 
 ```
-sudo docker stack deploy -c docker-compose.yml -p portainer
+sudo docker stack deploy -c docker-compose.yml portainer
 ```
 
-:warning: This program require a docker instance with **Swarm** mode enabled to be executed.
+:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
 
 ## Web access
 
@@ -25,3 +25,5 @@ Portainer's web interface is accessible via port `9443` (HTTPS).
 ## References
 
 * [Portainer website](https://www.portainer.io/)
+* [Portainer repository on Github](https://github.com/portainer/portainer)
+* [Portainer image on Docker Hub](https://hub.docker.com/r/portainer/portainer)

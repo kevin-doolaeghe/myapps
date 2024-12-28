@@ -1,10 +1,11 @@
 services:
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
-    user: "${UID:-0}:${GID:-0}"
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
-      - WG_HOST=${WG_HOST:?error}
-      - PASSWORD_HASH=${PASSWORD_HASH:?error} # docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'admin'
+      - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
+      # docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'admin'
+      # - PASSWORD_HASH=${PASSWORD_HASH:?error}
       - ENABLE_PROMETHEUS_METRICS=true
     cap_add:
       - NET_ADMIN
@@ -17,19 +18,25 @@ services:
     volumes:
       - data:/etc/wireguard
     networks:
-      - local
+      - ${DOCKER_NETWORK:?error}
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
       restart_policy:
         condition: on-failure
-      placement:
-        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DUCKDNS_HOST:?error}`)"
+        - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
+        - "traefik.http.routers.wireguard.entrypoints=websecure"
+        - "traefik.http.routers.wireguard.tls.certresolver=dnschallenge"
 
 volumes:
   data:
 
 networks:
-  local:
-    driver: overlay
-    attachable: true
+  ${DOCKER_NETWORK:?error}:
+    external: true

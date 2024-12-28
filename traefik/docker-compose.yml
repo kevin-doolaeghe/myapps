@@ -1,0 +1,53 @@
+services:
+  traefik:
+    image: "traefik:v2.10"
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.dnschallenge.acme.dnschallenge.provider=duckdns"
+      - "--certificatesresolvers.dnschallenge.acme.dnschallenge.delaybeforecheck=120"
+      - "--certificatesresolvers.dnschallenge.acme.email=${DUCKDNS_EMAIL:?error}"
+      - "--certificatesresolvers.dnschallenge.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    environment:
+      - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
+    secrets:
+      - duckdns_token
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+    networks:
+      - ${DOCKER_NETWORK:?error}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.tls.certresolver=dnschallenge"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+secrets:
+  duckdns_token:
+    external: true
+
+volumes:
+  traefik_certs:
+
+networks:
+  ${DOCKER_NETWORK:?error}:
+    external: true
