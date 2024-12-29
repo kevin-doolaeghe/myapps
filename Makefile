@@ -11,7 +11,7 @@ all: start
 init:
 	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m\n"
 	@bash init.sh
-	@printf "\033[0;33m► Initialization completed successfully.\033[0m\n"
+	@printf "\n\033[0;33m► Initialization completed successfully.\033[0m\n"
 
 # Start Docker stacks
 start: init
@@ -19,7 +19,7 @@ start: init
 	@for stack in $(STACKS); do \
 		bash up.sh $$stack; \
 	done
-	@printf "\033[0;33m► Starting completed successfully.\033[0m\n"
+	@printf "\n\033[0;33m► Starting completed successfully.\033[0m\n"
 
 # Stop Docker stacks
 stop:
@@ -27,7 +27,7 @@ stop:
 	@for stack in $(STACKS); do \
 		bash down.sh $$stack; \
 	done
-	@printf "\033[0;33m► Stopping completed successfully.\033[0m\n"
+	@printf "\n\033[0;33m► Stopping completed successfully.\033[0m\n"
 
 # Clean Docker environment
 clean: stop
