@@ -49,4 +49,6 @@ status:
 	@docker network ls
 	@echo "\n- volumes:"
 	@docker volume ls
+	@echo "\n- secrets:"
+	@docker secret ls
 	@echo "\n"
