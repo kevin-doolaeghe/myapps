@@ -6,9 +6,8 @@ services:
       - "--log.level=DEBUG" # to remove
       - "--global.checknewversion=true"
       - "--global.sendanonymoususage=false"
+      - "--api.dashboard=true"
       - "--metrics.prometheus"
-      - "--api.insecure=true" # to remove
-      # - "--api.dashboard=true"
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
@@ -26,7 +25,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080" # to remove
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
     secrets:
@@ -48,6 +46,9 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
+        # - "traefik.http.routers.api.service=api@internal"
+        # - "traefik.http.routers.api.middlewares=auth"
+        # - "traefik.http.middlewares.auth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
 secrets:
