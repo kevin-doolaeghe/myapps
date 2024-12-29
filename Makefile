@@ -9,38 +9,38 @@ all: start
 
 # Initialize Docker environment
 init:
-	@echo "Initializing Docker environment..."
+	@printf "\033[1;33mInitializing Docker environment...\033[0m\n"
 	@bash init.sh
-	@echo "\n► Initialization complete.\n"
+	@printf "\033[1;33m\n► Initialization complete.\n\033[0m\n"
 
 # Start Docker stacks
 start: init
-	@echo "Starting Docker stacks...\n"
+	@printf "\033[1;33mStarting Docker stacks...\n\033[0m\n"
 	@for stack in $(STACKS); do \
 		bash up.sh $$stack; \
 	done
-	@echo "\n► Starting complete.\n"
+	@printf "\033[1;33m\n► Starting complete.\n\033[0m\n"
 
 # Stop Docker stacks
 stop:
-	@echo "Stopping Docker stacks...\n"
+	@printf "\033[1;33mStopping Docker stacks...\n\033[0m\n"
 	@for stack in $(STACKS); do \
 		bash down.sh $$stack; \
 	done
-	@echo "\n► Stopping complete.\n"
+	@printf "\033[1;33m\n► Stopping complete.\n\033[0m\n"
 
 # Clean Docker environment
 clean: stop
-	@echo "Cleaning Docker environment..."
+	@printf "\033[1;33mCleaning Docker environment...\033[0m\n"
 	@echo "\nRemoving unused networks..."
 	@docker network prune -f
 	@echo "\nRemoving unused images..."
 	@docker image prune -f
-	@echo "\n► Cleaning complete.\n"
+	@printf "\033[1;33m\n► Cleaning complete.\n\033[0m\n"
 
 # Print Docker environment status
 status:
-	@echo "Printing Docker environment status:"
+	@printf "\033[1;33mDocker environment status:\033[0m\n"
 	@echo "\n· Stacks:"
 	@docker stack ls
 	@echo "\n· Services:"
