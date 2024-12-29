@@ -22,7 +22,7 @@ start: init
 # Stop Docker stacks
 stop:
 	@echo "Stopping Docker stacks..."
-	for stack in $(STACKS); do \
+	@for stack in $(STACKS); do \
 		bash down.sh $$stack; \
 	done
 

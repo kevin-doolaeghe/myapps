@@ -20,5 +20,5 @@ if docker stack ls | grep -qw "$stack"; then
     fi
 else
     echo "The stack $stack is not running."
-    exit 1
+    exit 0
 fi
