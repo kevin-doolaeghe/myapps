@@ -2,6 +2,7 @@
 
 # Function to check permissions
 check_permissions() {
+    echo "Checking permissions..."
     if ! sudo -v; then
         echo "You need sudo privileges to run Docker commands. Please ensure you have proper permissions."
         exit 1
@@ -121,6 +122,7 @@ set_docker_secret_with_prompt_and_regex() {
 # Function to install Docker
 install_docker() {
     # Check if Docker is installed
+    echo "Checking if Docker is installed..."
     command -v docker > /dev/null 2>&1 || {
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
@@ -148,7 +150,8 @@ initialize_docker_swarm() {
     local advertise_addr
 
     # Check if Docker Swarm is initialized
-    sudo docker info | grep -i swarm > /dev/null 2>&1 || {
+    echo "Checking if Docker Swarm is initialized..."
+    sudo docker info 2>/dev/null | grep -i swarm > /dev/null 2>&1 || {
         echo "Docker Swarm is not initialized. Initializing Docker Swarm..."
 
         # Read the default address pool and advertise address for Docker Swarm
@@ -169,6 +172,7 @@ create_docker_user() {
     local docker_user="dockeruser"
 
     # Check if the system user exists
+    echo "Checking if $docker_user exists..."
     if ! id -u $docker_user > /dev/null 2>&1; then
         # Create a new user
         echo "Creating system user '$docker_user'..."
@@ -187,7 +191,8 @@ create_docker_user() {
         set_environment_variable_with_command "DOCKER_PUID" "$(id -u dockeruser)"
     fi
 
-    # Check if the user is in the 'docker' group
+    # Check if the user belongs to the 'docker' group
+    echo "Checking if $docker_user belongs to the 'docker' group..."
     if ! groups $docker_user | grep -q "\bdocker\b"; then
         # Add the user to the 'docker' group
         echo "User '$docker_user' is not in the 'docker' group. Adding user to the 'docker' group..."
@@ -225,6 +230,7 @@ create_docker_network() {
     local docker_network="docker_network"
     
     # Check if the Docker network exists
+    echo "Checking if $docker_network exists..."
     if ! sudo docker network inspect $docker_network > /dev/null 2>&1; then
         # Create the Docker network
         echo "Creating $docker_network network..."
