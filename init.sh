@@ -228,6 +228,9 @@ initialize_docker_secrets() {
         password=$(read_with_regex "Enter the password" "^[A-Za-z0-9@\$!%*?&]{6,}\$")
         password_hash=$(docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw "$password" | grep -oP "PASSWORD_HASH='.*'" | sed "s/PASSWORD_HASH='//;s/'$//")
 
+        echo "PASS: $password"
+        echo "PASS_HASH: $password_hash"
+
         set_docker_secret "password" "$password"
         set_environment_variable "WIREGUARD_PASSWORD_HASH" "$passord_hash"
     fi
