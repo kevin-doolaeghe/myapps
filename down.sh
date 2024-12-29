@@ -12,13 +12,13 @@ stack="${1%/}"
 # Stop the stack if it is running
 if docker stack ls | grep -qw "$stack"; then
     if docker stack rm "$stack"; then
-        echo "Stack $stack stopped."
+        echo "✓ Stack $stack stopped."
         exit 0
     else
-        echo "Failed to stop stack $stack."
+        echo "✗ Failed to stop stack $stack."
         exit 1
     fi
 else
-    echo "The stack $stack is not running."
+    echo "✓ The stack $stack is not running."
     exit 0
 fi
