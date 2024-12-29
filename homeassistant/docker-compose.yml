@@ -24,7 +24,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.homeassistant.entrypoints=websecure"
-        - "traefik.http.routers.homeassistant.tls.certresolver=dnschallenge"
+        - "traefik.http.routers.homeassistant.tls.certresolver=letsencrypt"
         - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
 
 volumes:

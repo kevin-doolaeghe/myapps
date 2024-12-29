@@ -37,7 +37,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.portainer.rule=Host(`portainer.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.portainer.entrypoints=websecure"
-        - "traefik.http.routers.portainer.tls.certresolver=dnschallenge"
+        - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
         - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 volumes:

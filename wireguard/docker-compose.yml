@@ -30,7 +30,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.wireguard.rule=Host(`wireguard.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.wireguard.entrypoints=websecure"
-        - "traefik.http.routers.wireguard.tls.certresolver=dnschallenge"
+        - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
         - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
 
 volumes:
