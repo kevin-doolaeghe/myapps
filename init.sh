@@ -157,7 +157,6 @@ set_docker_environment_variables() {
     done
 
     declare -A env_vars_2=( 
-        [DUCKDNS_EMAIL]="Duck DNS email address"
         [WIREGUARD_DOMAIN_NAME]="domain name used for WireGuard VPN"
         [TRAEFIK_DOMAIN_NAME]="domain name used for Traefik reverse-proxy"
     )
@@ -181,6 +180,34 @@ set_docker_environment_variables() {
                     break
                 else
                     echo "Invalid domain format. Please try again."
+                fi
+            done
+        fi
+    done
+    
+    declare -A env_vars_3=( 
+        [DUCKDNS_EMAIL]="Duck DNS email address"
+    )
+
+    for var in "${!env_vars_3[@]}"; do
+        if [ -z "${!var}" ]; then
+            if ! $initializing_env_vars; then
+                echo "Initializing Docker environment variables..."
+                initializing_env_vars=true
+            fi
+
+            while true; do
+                read -p "Enter the ${env_vars_3[$var]}: " env_var_value
+                if [[ "$env_var_value" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+                    echo "Setting $var environment variable..."
+                    export "$var"="$env_var_value"
+                    if ! grep -q "^export $var=" ~/.bashrc; then
+                        echo "export $var=$env_var_value" >> ~/.bashrc
+                    fi
+                    echo "$var set to ${!var}."
+                    break
+                else
+                    echo "Invalid email address format. Please try again."
                 fi
             done
         fi
