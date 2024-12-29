@@ -89,7 +89,7 @@ set_docker_secret() {
 
     # Create the Docker secret
     echo "$secret_value" | sudo docker secret create "$secret_name" - || {
-        echo -e "\033[1;31m✗ Failed to create Docker secret '$secret_name'.\033[0m"
+        echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create Docker secret '$secret_name'.\033[0m"
         exit 1
     }
     echo "Docker secret '$secret_name' created."
@@ -112,27 +112,27 @@ set_docker_secret_with_prompt_and_regex() {
 
 # Function to check permissions
 check_permissions() {
-    echo -e "\n\033[1;36m① Permissions\033[0m"
+    echo -e "\033[0;36m①\033[0m \033[1;36mPermissions\033[0m"
 
     # Check for permissions
     if ! sudo -v; then
-        echo -e "\033[1;31m✗ You need sudo privileges to run Docker commands. Please ensure you have proper permissions.\033[0m"
+        echo -e "\033[0;35m✗\033[0m \033[1;31mYou need sudo privileges to run Docker commands. Please ensure you have proper permissions.\033[0m"
         exit 1
     fi
     
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to install Docker
 install_docker() {
-    echo -e "\n\033[1;36m② Docker setup\033[0m"
+    echo -e "\033[0;36m②\033[0m \033[1;36mDocker setup\033[0m"
     
     # Check if Docker is installed
     command -v docker > /dev/null 2>&1 || {
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
         if ! curl -fsSL https://get.docker.com | sudo sh; then
-            echo -e "\033[1;31m✗ Failed to install Docker. Please check your system's configuration.\033[0m"
+            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to install Docker. Please check your system's configuration.\033[0m"
             exit 1
         fi
         echo "Docker has been installed."
@@ -141,19 +141,19 @@ install_docker() {
         if ! sudo systemctl is-active --quiet docker; then
             echo "Docker service is not running. Starting Docker..."
             sudo systemctl start docker || {
-                echo -e "\033[1;31m✗ Failed to start Docker service.\033[0m"
+                echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to start Docker service.\033[0m"
                 exit 1
             }
         fi
         echo "Docker service is running."
     }
 
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to initialize Docker Swarm
 initialize_docker_swarm() {
-    echo -e "\n\033[1;36m③ Docker Swarm setup\033[0m"
+    echo -e "\n\033[0;36m③\033[0m \033[1;36mDocker Swarm setup\033[0m"
 
     local default_addr_pool
     local advertise_addr
@@ -168,18 +168,18 @@ initialize_docker_swarm() {
 
         # Initialize Docker Swarm
         sudo docker swarm init --default-addr-pool $default_addr_pool --advertise-addr $advertise_addr || {
-            echo -e "\033[1;31m✗ Failed to initialize Docker Swarm.\033[0m"
+            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to initialize Docker Swarm.\033[0m"
             exit 1
         }
         echo "Docker Swarm initialized."
     }
 
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to create a system user for Docker
 create_docker_user() {
-    echo -e "\n\033[1;36m④ Docker service user\033[0m"
+    echo -e "\n\033[0;36m④\033[0m \033[1;36mDocker service user\033[0m"
 
     local docker_user="dockeruser"
 
@@ -188,7 +188,7 @@ create_docker_user() {
         # Create a new user
         echo "Creating system user '$docker_user'..."
         sudo useradd -m -s /bin/bash $docker_user || {
-            echo -e "\033[1;31m✗ Failed to create user '$docker_user'.\033[0m"
+            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create user '$docker_user'.\033[0m"
             exit 1
         }
         echo "User '$docker_user' created."
@@ -214,23 +214,23 @@ create_docker_user() {
         set_environment_variable_with_command "DOCKER_PGID" "$(getent group docker | cut -d: -f3)"
     fi
 
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
-    echo -e "\n\033[1;36m⑤ Docker secrets\033[0m"
+    echo -e "\n\033[0;36m⑤\033[0m \033[1;36mDocker secrets\033[0m"
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
     set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@\$!%*?&])[A-Za-z\d@\$!%*?&]{8,20}\$"
     
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo -e "\n\033[1;36m⑥ Docker environment variables\033[0m"
+    echo -e "\n\033[0;36m⑥\033[0m \033[1;36mDocker environment variables\033[0m"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
@@ -238,12 +238,12 @@ set_docker_environment_variables() {
     set_environment_variable_with_prompt_and_regex "TRAEFIK_DOMAIN_NAME" "Enter the domain name used for Traefik reverse-proxy" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$"
     set_environment_variable_with_prompt_and_regex "DUCKDNS_EMAIL" "Enter the Duck DNS email address" "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$"
     
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Function to create the Docker network
 create_docker_network() {
-    echo -e "\n\033[1;36m⑦ Docker network\033[0m"
+    echo -e "\n\033[0;36m⑦\033[0m \033[1;36mDocker network\033[0m"
 
     local docker_network="docker_network"
     
@@ -252,7 +252,7 @@ create_docker_network() {
         # Create the Docker network
         echo "Creating $docker_network network..."
         sudo docker network create --driver overlay --attachable $docker_network || {
-            echo -e "\033[1;31m✗ Failed to create Docker network '$docker_network'.\033[0m"
+            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create Docker network '$docker_network'.\033[0m"
             exit 1
         }
         echo "$docker_network network created."
@@ -262,7 +262,7 @@ create_docker_network() {
         set_environment_variable "DOCKER_NETWORK" "$docker_network"
     fi
 
-    echo -e "\033[1;32m✓ Task completed successfully.\033[0m"
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
 # Main script execution
