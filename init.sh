@@ -128,7 +128,7 @@ install_docker() {
     echo -e "\033[0;36m②\033[0m \033[1;36mDocker setup\033[0m"
     
     # Check if Docker is installed
-    if command -v docker > /dev/null 2>&1; then
+    if ! command -v docker > /dev/null 2>&1; then
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
         if ! curl -fsSL https://get.docker.com | sudo sh; then
