@@ -20,7 +20,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.grafana.rule=Host(`grafana.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.grafana.entrypoints=websecure"
-        - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
         - "traefik.http.services.grafana.loadbalancer.server.port=3000"
   influxdb:
     image: influxdb:1.8

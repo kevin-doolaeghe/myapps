@@ -18,7 +18,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.duplicati.rule=Host(`duplicati.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.duplicati.entrypoints=websecure"
-        - "traefik.http.routers.duplicati.tls.certresolver=letsencrypt"
         - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
 
 volumes:

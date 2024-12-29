@@ -26,7 +26,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.pihole.rule=Host(`pihole.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.pihole.entrypoints=websecure"
-        - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"
         - "traefik.http.services.pihole.loadbalancer.server.port=80"
 
 secrets:
