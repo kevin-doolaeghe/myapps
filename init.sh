@@ -159,7 +159,7 @@ initialize_docker_swarm() {
     local advertise_addr
 
     # Check if Docker Swarm is initialized
-    sudo docker info 2>/dev/null | grep -i swarm > /dev/null 2>&1 || {
+    sudo docker info | grep -i swarm > /dev/null 2>&1 && {
         echo "Docker Swarm is not initialized. Initializing Docker Swarm..."
 
         # Read the default address pool and advertise address for Docker Swarm
