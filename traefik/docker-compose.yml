@@ -3,11 +3,11 @@ services:
     image: "traefik:v2.10"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     command:
-      - "--log.level=DEBUG"
+      - "--log.level=DEBUG" # to remove
       - "--global.checknewversion=true"
       - "--global.sendanonymoususage=false"
       - "--metrics.prometheus"
-      - "--api.insecure=true"
+      - "--api.insecure=true" # to remove
       # - "--api.dashboard=true"
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
@@ -27,6 +27,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080" # to remove
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
     secrets:
