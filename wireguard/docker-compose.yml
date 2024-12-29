@@ -29,10 +29,10 @@ services:
         condition: on-failure
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DUCKDNS_HOST:?error}`)"
-        - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
+        - "traefik.http.routers.wireguard.rule=Host(`wireguard.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.wireguard.entrypoints=websecure"
         - "traefik.http.routers.wireguard.tls.certresolver=dnschallenge"
+        - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
 
 volumes:
   data:

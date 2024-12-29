@@ -96,7 +96,6 @@ initialize_docker_secrets() {
 
     declare -A secrets=( 
         ["duckdns_token"]="Duck DNS token"
-        ["duckdns_email"]="Duck DNS email"
         ["username"]="username"
         ["password"]="password"
     )
@@ -158,6 +157,7 @@ set_docker_environment_variables() {
     done
 
     declare -A env_vars_2=( 
+        [DUCKDNS_EMAIL]="Duck DNS email address"
         [WIREGUARD_DOMAIN_NAME]="domain name used for WireGuard VPN"
         [TRAEFIK_DOMAIN_NAME]="domain name used for Traefik reverse-proxy"
     )

@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 # Check if exactly one argument is provided
-if [ "$#" -ne 1 ]; then
+if [[ "$#" -ne 1 ]]; then
     echo "Usage: ./down.sh <stack>"
     exit 1
 fi
 
 # Trim trailing slashes from the stack name
-stack=$(echo "$1" | sed 's:/*$::')
+stack="${1%/}"
 
 # Stop the stack if it is running
 if docker stack ls | grep -qw "$stack"; then
