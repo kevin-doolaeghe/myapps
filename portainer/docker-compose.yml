@@ -21,7 +21,6 @@ services:
     command: "-H tcp://tasks.agent:9001 --tlsskipverify"
     ports:
       - "8000:8000/tcp"
-      - "9443:9443/tcp"
     volumes:
       - portainer_data:/data
     networks:

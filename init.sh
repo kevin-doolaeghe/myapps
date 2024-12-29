@@ -17,8 +17,8 @@ read_with_regex() {
             read -p "$prompt: " input
         fi
 
-        # Trim spaces from both ends
-        input=$(echo "$input" | xargs)
+        # Trim spaces and new lines
+        input=$(echo "$input" | xargs | tr -d '\n')
 
         # Check if the input is valid
         if [[ $input =~ $regex ]]; then

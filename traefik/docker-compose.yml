@@ -9,6 +9,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--metrics.prometheus"
       - "--certificatesresolvers.dnschallenge.acme.dnschallenge.provider=duckdns"
       - "--certificatesresolvers.dnschallenge.acme.dnschallenge.delaybeforecheck=120"
       - "--certificatesresolvers.dnschallenge.acme.email=${DUCKDNS_EMAIL:?error}"
@@ -16,7 +17,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
     secrets:
