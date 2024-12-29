@@ -223,7 +223,7 @@ initialize_docker_secrets() {
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "[a-zA-Z0-9-]+"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
-    set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@\$!%*?&])[A-Za-z\d@\$!%*?&]{8,20}\$"
+    set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^[A-Za-z0-9@\$!%*?&]{8,}\$"
     
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
