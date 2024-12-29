@@ -9,13 +9,13 @@ all: start
 
 # Initialize Docker environment
 init:
-	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m"
+	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m\n"
 	@bash init.sh
 	@printf "\033[0;33m► Initialization completed successfully.\033[0m\n"
 
 # Start Docker stacks
 start: init
-	@printf "\033[0;33mⓘ\033[0m \033[1;33mStarting Docker stacks...\033[0m\n"
+	@printf "\n\033[0;33mⓘ\033[0m \033[1;33mStarting Docker stacks...\033[0m\n"
 	@for stack in $(STACKS); do \
 		bash up.sh $$stack; \
 	done
@@ -31,10 +31,10 @@ stop:
 
 # Clean Docker environment
 clean: stop
-	@printf "\033[0;33mⓘ\033[0m \033[1;33mCleaning Docker environment...\033[0m"
-	@printf "\n\033[1;30mRemoving unused networks...\033[0m"
+	@printf "\n\033[0;33mⓘ\033[0m \033[1;33mCleaning Docker environment...\033[0m"
+	@printf "\n\033[1;30mRemoving unused networks...\033[0m\n"
 	@docker network prune -f
-	@printf "\n\033[1;30mRemoving unused images...\033[0m"
+	@printf "\n\033[1;30mRemoving unused images...\033[0m\n"
 	@docker image prune -f
 	@printf "\n\033[0;33m► Cleaning completed successfully.\033[0m\n"
 
