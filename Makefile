@@ -9,25 +9,25 @@ all: start
 
 # Initialize Docker environment
 init:
-	@echo "Initializing Docker environment..."
+	@echo "Initializing Docker environment...\n"
 	@bash init.sh
-	@echo "\nInitialization complete.\n"
+	@echo "\n► Initialization complete.\n"
 
 # Start Docker stacks
 start: init
-	@echo "Starting Docker stacks..."
+	@echo "Starting Docker stacks...\n"
 	@for stack in $(STACKS); do \
 		bash up.sh $$stack; \
 	done
-	@echo "\nStarting complete.\n"
+	@echo "\n► Starting complete.\n"
 
 # Stop Docker stacks
 stop:
-	@echo "Stopping Docker stacks..."
+	@echo "Stopping Docker stacks...\n"
 	@for stack in $(STACKS); do \
 		bash down.sh $$stack; \
 	done
-	@echo "\nStopping complete.\n"
+	@echo "\n► Stopping complete.\n"
 
 # Clean Docker environment
 clean: stop
@@ -36,19 +36,18 @@ clean: stop
 	@docker network prune -f
 	@echo "\nRemoving unused images..."
 	@docker image prune -f
-	@echo "\nCleaning complete.\n"
+	@echo "\n► Cleaning complete.\n"
 
 # Print Docker environment status
 status:
-	@echo "Docker status:"
-	@echo "\n- stacks:"
+	@echo "Printing Docker environment status:"
+	@echo "\n· Stacks:"
 	@docker stack ls
-	@echo "\n- services:"
+	@echo "\n· Services:"
 	@docker service ls
-	@echo "\n- networks:"
-	@docker network ls
-	@echo "\n- volumes:"
-	@docker volume ls
-	@echo "\n- secrets:"
+	@echo "\n· Secrets:"
 	@docker secret ls
-	@echo "\n"
+	@echo "\n· Volumes:"
+	@docker volume ls
+	@echo "\n· Networks:"
+	@docker network ls
