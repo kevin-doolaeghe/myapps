@@ -89,7 +89,7 @@ set_docker_secret() {
 
     # Create the Docker secret
     echo "$secret_value" | sudo docker secret create "$secret_name" - || {
-        echo "Failed to create Docker secret '$secret_name'."
+        echo "✗ Failed to create Docker secret '$secret_name'."
         exit 1
     }
     echo "Docker secret '$secret_name' created."
@@ -116,9 +116,11 @@ check_permissions() {
 
     # Check for permissions
     if ! sudo -v; then
-        echo "You need sudo privileges to run Docker commands. Please ensure you have proper permissions."
+        echo "✗ You need sudo privileges to run Docker commands. Please ensure you have proper permissions."
         exit 1
     fi
+
+    echo "✓"
 }
 
 # Function to install Docker
@@ -130,7 +132,7 @@ install_docker() {
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
         if ! curl -fsSL https://get.docker.com | sudo sh; then
-            echo "Failed to install Docker. Please check your system's configuration."
+            echo "✗ Failed to install Docker. Please check your system's configuration."
             exit 1
         fi
         echo "Docker has been installed."
@@ -139,12 +141,14 @@ install_docker() {
         if ! sudo systemctl is-active --quiet docker; then
             echo "Docker service is not running. Starting Docker..."
             sudo systemctl start docker || {
-                echo "Failed to start Docker service."
+                echo "✗ Failed to start Docker service."
                 exit 1
             }
         fi
         echo "Docker service is running."
     }
+
+    echo "✓"
 }
 
 # Function to initialize Docker Swarm
@@ -164,11 +168,13 @@ initialize_docker_swarm() {
 
         # Initialize Docker Swarm
         sudo docker swarm init --default-addr-pool $default_addr_pool --advertise-addr $advertise_addr || {
-            echo "Failed to initialize Docker Swarm."
+            echo "✗ Failed to initialize Docker Swarm."
             exit 1
         }
         echo "Docker Swarm initialized."
     }
+
+    echo "✓"
 }
 
 # Function to create a system user for Docker
@@ -182,7 +188,7 @@ create_docker_user() {
         # Create a new user
         echo "Creating system user '$docker_user'..."
         sudo useradd -m -s /bin/bash $docker_user || {
-            echo "Failed to create user '$docker_user'."
+            echo "✗ Failed to create user '$docker_user'."
             exit 1
         }
         echo "User '$docker_user' created."
@@ -207,6 +213,8 @@ create_docker_user() {
         echo "Updating DOCKER_PGID environment variable..."
         set_environment_variable_with_command "DOCKER_PGID" "$(getent group docker | cut -d: -f3)"
     fi
+
+    echo "✓"
 }
 
 # Function to initialize Docker secrets
@@ -216,6 +224,8 @@ initialize_docker_secrets() {
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
     set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@\$!%*?&])[A-Za-z\d@\$!%*?&]{8,20}\$"
+    
+    echo "✓"
 }
 
 # Function to set environment variables for Docker
@@ -227,6 +237,8 @@ set_docker_environment_variables() {
     set_environment_variable_with_prompt_and_regex "WIREGUARD_DOMAIN_NAME" "Enter the domain name used for WireGuard VPN" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$"
     set_environment_variable_with_prompt_and_regex "TRAEFIK_DOMAIN_NAME" "Enter the domain name used for Traefik reverse-proxy" "^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$"
     set_environment_variable_with_prompt_and_regex "DUCKDNS_EMAIL" "Enter the Duck DNS email address" "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$"
+    
+    echo "✓"
 }
 
 # Function to create the Docker network
@@ -240,7 +252,7 @@ create_docker_network() {
         # Create the Docker network
         echo "Creating $docker_network network..."
         sudo docker network create --driver overlay --attachable $docker_network || {
-            echo "Failed to create Docker network '$docker_network'."
+            echo "✗ Failed to create Docker network '$docker_network'."
             exit 1
         }
         echo "$docker_network network created."
@@ -249,6 +261,8 @@ create_docker_network() {
         echo "Updating DOCKER_NETWORK environment variable..."
         set_environment_variable "DOCKER_NETWORK" "$docker_network"
     fi
+
+    echo "✓"
 }
 
 # Main script execution
