@@ -112,7 +112,7 @@ set_docker_secret_with_prompt_and_regex() {
 
 # Function to check permissions
 check_permissions() {
-    echo "① Permissions"
+    echo -e "\n① Permissions"
 
     # Check for permissions
     if ! sudo -v; then
@@ -123,7 +123,7 @@ check_permissions() {
 
 # Function to install Docker
 install_docker() {
-    echo "② Docker setup"
+    echo -e "\n② Docker setup"
     
     # Check if Docker is installed
     command -v docker > /dev/null 2>&1 || {
@@ -149,7 +149,7 @@ install_docker() {
 
 # Function to initialize Docker Swarm
 initialize_docker_swarm() {
-    echo "③ Docker Swarm setup"
+    echo -e "\n③ Docker Swarm setup"
 
     local default_addr_pool
     local advertise_addr
@@ -173,7 +173,7 @@ initialize_docker_swarm() {
 
 # Function to create a system user for Docker
 create_docker_user() {
-    echo "④ Docker service user"
+    echo -e "\n④ Docker service user"
 
     local docker_user="dockeruser"
 
@@ -211,7 +211,7 @@ create_docker_user() {
 
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
-    echo "⑤ Docker secrets"
+    echo -e "\n⑤ Docker secrets"
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
@@ -220,7 +220,7 @@ initialize_docker_secrets() {
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo "⑥ Docker environment variables"
+    echo -e "\n⑥ Docker environment variables"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
@@ -231,7 +231,7 @@ set_docker_environment_variables() {
 
 # Function to create the Docker network
 create_docker_network() {
-    echo "⑦ Docker network"
+    echo -e "\n⑦ Docker network"
 
     local docker_network="docker_network"
     
