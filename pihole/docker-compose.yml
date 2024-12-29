@@ -8,8 +8,8 @@ services:
       - TZ=${TZ:?error}
       - WEBPASSWORD_FILE=/run/secrets/password
     volumes:
-      - config:/etc/pihole
-      - dnsmasq:/etc/dnsmasq.d
+      - pihole_config:/etc/pihole
+      - pihole_dnsmasq:/etc/dnsmasq.d
     ports:
       - "53:53"
     networks:
@@ -34,8 +34,8 @@ secrets:
     external: true
 
 volumes:
-  config:
-  dnsmasq:
+  pihole_config:
+  pihole_dnsmasq:
 
 networks:
   network:

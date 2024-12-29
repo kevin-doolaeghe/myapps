@@ -16,7 +16,7 @@ services:
     ports:
       - "51820:51820/udp"
     volumes:
-      - data:/etc/wireguard
+      - wireguard_data:/etc/wireguard
     networks:
       - network
     deploy:
@@ -35,7 +35,7 @@ services:
         - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
 
 volumes:
-  data:
+  wireguard_data:
 
 networks:
   network:

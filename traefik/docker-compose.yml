@@ -23,7 +23,7 @@ services:
       - duckdns_token
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik_certs:/letsencrypt
+      - traefik_data:/letsencrypt
     networks:
       - network
     deploy:
@@ -46,7 +46,7 @@ secrets:
     external: true
 
 volumes:
-  traefik_certs:
+  traefik_data:
 
 networks:
   network:

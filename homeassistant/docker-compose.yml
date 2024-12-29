@@ -9,7 +9,7 @@ services:
       - ${SKYCONNECT_DEV:-/dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_0e9226d6be96ed11b33dc698a7669f5d-if00-port0}:/dev/ttyUSB0
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - config:/config
+      - homeassistant_config:/config
     networks:
       - network
     deploy:
@@ -28,7 +28,7 @@ services:
         - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
 
 volumes:
-  config:
+  homeassistant_config:
 
 networks:
   network:

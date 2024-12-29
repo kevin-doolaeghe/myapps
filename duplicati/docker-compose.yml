@@ -6,7 +6,7 @@ services:
       - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
       - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD:-admin}
     volumes:
-      - data:/data
+      - duplicati_data:/data
     networks:
       - network
     deploy:
@@ -22,7 +22,7 @@ services:
         - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
 
 volumes:
-  data:
+  duplicati_data:
 
 networks:
   network:
