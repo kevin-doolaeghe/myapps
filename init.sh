@@ -128,7 +128,7 @@ install_docker() {
     echo -e "\033[0;36m②\033[0m \033[1;36mDocker setup\033[0m"
     
     # Check if Docker is installed
-    command -v docker > /dev/null 2>&1 || {
+    if command -v docker > /dev/null 2>&1; then
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
         if ! curl -fsSL https://get.docker.com | sudo sh; then
@@ -146,7 +146,7 @@ install_docker() {
             }
         fi
         echo "Docker service is running."
-    }
+    fi
 
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
@@ -221,7 +221,7 @@ create_docker_user() {
 initialize_docker_secrets() {
     echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets\033[0m"
 
-    set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
+    set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "[a-zA-Z0-9-]+"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
     set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@\$!%*?&])[A-Za-z\d@\$!%*?&]{8,20}\$"
     
