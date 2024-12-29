@@ -26,7 +26,7 @@ read_with_regex() {
         fi
 
         # Trim spaces from both ends
-        input = $(echo "$input" | xargs)
+        input=$(echo "$input" | xargs)
 
         # Check if the input is valid
         if [[ $input =~ $regex ]]; then
@@ -211,7 +211,7 @@ initialize_docker_secrets() {
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo "Checking for Docker environment variables..."
+    echo "Checking for existing Docker environment variables..."
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
