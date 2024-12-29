@@ -6,7 +6,7 @@ services:
       - homepage_config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - ${DOCKER_NETWORK:?error}
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -23,5 +23,6 @@ volumes:
   homepage_config:
 
 networks:
-  ${DOCKER_NETWORK:?error}:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true

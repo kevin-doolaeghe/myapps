@@ -18,7 +18,7 @@ services:
     volumes:
       - data:/etc/wireguard
     networks:
-      - ${DOCKER_NETWORK:?error}
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -38,5 +38,6 @@ volumes:
   data:
 
 networks:
-  ${DOCKER_NETWORK:?error}:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true

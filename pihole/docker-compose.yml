@@ -13,7 +13,7 @@ services:
     ports:
       - "53:53"
     networks:
-      - ${DOCKER_NETWORK:?error}
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -38,5 +38,6 @@ volumes:
   dnsmasq:
 
 networks:
-  ${DOCKER_NETWORK:?error}:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true

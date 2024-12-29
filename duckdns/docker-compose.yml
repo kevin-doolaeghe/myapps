@@ -11,7 +11,7 @@ services:
     volumes:
       - duckdns_config:/config
     networks:
-      - ${DOCKER_NETWORK:?error}
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -29,5 +29,6 @@ volumes:
   duckdns_config:
 
 networks:
-  ${DOCKER_NETWORK:?error}:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true

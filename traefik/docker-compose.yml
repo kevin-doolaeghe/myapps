@@ -25,7 +25,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik_certs:/letsencrypt
     networks:
-      - ${DOCKER_NETWORK:?error}
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -49,5 +49,6 @@ volumes:
   traefik_certs:
 
 networks:
-  ${DOCKER_NETWORK:?error}:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true
