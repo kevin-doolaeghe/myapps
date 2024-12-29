@@ -2,7 +2,7 @@
 
 # Check if exactly one argument is provided
 if [[ "$#" -ne 1 ]]; then
-    echo "Usage: ./down.sh <stack>"
+    echo "\033[1;33mUsage:\033[0m \033[0;36m./down.sh\033[0m \033[1;36m<stack>\033[0m"
     exit 1
 fi
 

@@ -2,7 +2,7 @@
 
 # Check if exactly one argument is provided
 if [[ "$#" -ne 1 ]]; then
-    echo "Usage: ./up.sh <stack>"
+    echo "\033[1;33mUsage:\033[0m \033[0;36m./up.sh\033[0m \033[1;36m<stack>\033[0m"
     exit 1
 fi
 
@@ -20,6 +20,6 @@ if [[ -f "$compose_file" ]]; then
         exit 1
     fi
 else
-    echo -e "\033[1;31m✗ No docker-compose.yml file found for $stack.\033[0m"
-    exit 1
+    echo -e "\033[1;30m✗ No docker-compose.yml file found for $stack. Skipping...\033[0m"
+    exit 0
 fi
