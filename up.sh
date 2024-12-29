@@ -14,12 +14,13 @@ compose_file="$stack/docker-compose.yml"
 if [[ -f "$compose_file" ]]; then
     if docker stack deploy -c "$compose_file" --detach "$stack"; then
         echo "✓ Started $stack stack."
+        echo -e "\033[1;32m✓ Started $stack stack.\033[0m"
         exit 0
     else
-        echo "✗ Failed to start $stack stack."
+        echo -e "\033[1;31m✗ Failed to start $stack stack.\033[0m"
         exit 1
     fi
 else
-    echo "✗ No docker-compose.yml file found for $stack."
+    echo -e "\033[1;31m✗ No docker-compose.yml file found for $stack.\033[0m"
     exit 1
 fi
