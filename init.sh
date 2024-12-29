@@ -34,7 +34,7 @@ read_with_regex() {
             echo "$input"
             return
         else
-            echo "Invalid input. Please try again."
+            echo "Invalid input. Please try again." >&2
         fi
     done
 }
