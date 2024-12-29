@@ -9,7 +9,7 @@ all: start
 
 # Initialize Docker environment
 init:
-	@echo "Initializing Docker environment...\n"
+	@echo "Initializing Docker environment..."
 	@bash init.sh
 	@echo "\n► Initialization complete.\n"
 
