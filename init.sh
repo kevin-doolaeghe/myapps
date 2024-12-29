@@ -253,7 +253,6 @@ create_docker_network() {
 
 # Main script execution
 check_permissions
-update
 install_docker
 initialize_docker_swarm
 create_docker_user
