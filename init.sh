@@ -223,8 +223,15 @@ initialize_docker_secrets() {
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "[a-zA-Z0-9-]+"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
-    set_docker_secret_with_prompt_and_regex "password" "Enter the password" "^[A-Za-z0-9@\$!%*?&]{8,}\$"
-    
+
+    if ! sudo docker secret ls | grep -w "password" > /dev/null 2>&1; then
+        password=$(read_with_regex "Enter the password" "^[A-Za-z0-9@\$!%*?&]{6,}\$")
+        password_hash=$(docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw "$password" | grep -oP "PASSWORD_HASH='.*'" | sed "s/PASSWORD_HASH='//;s/'$//")
+
+        set_docker_secret "password" "$password"
+        set_environment_variable "WIREGUARD_PASSWORD_HASH" $passord_hash
+    fi
+
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
