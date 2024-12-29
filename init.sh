@@ -112,7 +112,9 @@ set_docker_secret_with_prompt_and_regex() {
 
 # Function to check permissions
 check_permissions() {
-    echo "\n① Checking permissions..."
+    echo "① Permissions"
+
+    # Check for permissions
     if ! sudo -v; then
         echo "You need sudo privileges to run Docker commands. Please ensure you have proper permissions."
         exit 1
@@ -121,8 +123,9 @@ check_permissions() {
 
 # Function to install Docker
 install_docker() {
+    echo "② Docker setup"
+    
     # Check if Docker is installed
-    echo "\n② Checking if Docker is installed..."
     command -v docker > /dev/null 2>&1 || {
         # Install Docker
         echo "Docker is not installed. Installing Docker..."
@@ -146,11 +149,12 @@ install_docker() {
 
 # Function to initialize Docker Swarm
 initialize_docker_swarm() {
+    echo "③ Docker Swarm setup"
+
     local default_addr_pool
     local advertise_addr
 
     # Check if Docker Swarm is initialized
-    echo "\n③ Checking if Docker Swarm is initialized..."
     sudo docker info 2>/dev/null | grep -i swarm > /dev/null 2>&1 || {
         echo "Docker Swarm is not initialized. Initializing Docker Swarm..."
 
@@ -169,10 +173,11 @@ initialize_docker_swarm() {
 
 # Function to create a system user for Docker
 create_docker_user() {
+    echo "④ Docker service user"
+
     local docker_user="dockeruser"
 
     # Check if the system user exists
-    echo "\n④ Checking if $docker_user exists..."
     if ! id -u $docker_user > /dev/null 2>&1; then
         # Create a new user
         echo "Creating system user '$docker_user'..."
@@ -192,7 +197,6 @@ create_docker_user() {
     fi
 
     # Check if the user belongs to the 'docker' group
-    echo "\n⑤ Checking if $docker_user belongs to the 'docker' group..."
     if ! groups $docker_user | grep -q "\bdocker\b"; then
         # Add the user to the 'docker' group
         echo "User '$docker_user' is not in the 'docker' group. Adding user to the 'docker' group..."
@@ -207,7 +211,7 @@ create_docker_user() {
 
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
-    echo "\n⑥ Checking for existing Docker secrets..."
+    echo "⑥ Docker secrets"
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
@@ -216,7 +220,7 @@ initialize_docker_secrets() {
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo "\n⑦ Checking for existing Docker environment variables..."
+    echo "⑦ Docker environment variables"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
@@ -227,10 +231,11 @@ set_docker_environment_variables() {
 
 # Function to create the Docker network
 create_docker_network() {
+    echo "⑧ Docker network"
+
     local docker_network="docker_network"
     
     # Check if the Docker network exists
-    echo "\n⑧ Checking if $docker_network exists..."
     if ! sudo docker network inspect $docker_network > /dev/null 2>&1; then
         # Create the Docker network
         echo "Creating $docker_network network..."
