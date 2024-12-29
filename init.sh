@@ -112,7 +112,7 @@ set_docker_secret_with_prompt_and_regex() {
 
 # Function to check permissions
 check_permissions() {
-    echo -e "\n① Permissions"
+    echo -e "\n\033[1;36m① Permissions\033[0m"
 
     # Check for permissions
     if ! sudo -v; then
@@ -125,7 +125,7 @@ check_permissions() {
 
 # Function to install Docker
 install_docker() {
-    echo -e "\n② Docker setup"
+    echo -e "\n\033[1;36m② Docker setup\033[0m"
     
     # Check if Docker is installed
     command -v docker > /dev/null 2>&1 || {
@@ -153,7 +153,7 @@ install_docker() {
 
 # Function to initialize Docker Swarm
 initialize_docker_swarm() {
-    echo -e "\n③ Docker Swarm setup"
+    echo -e "\n\033[1;36m③ Docker Swarm setup\033[0m"
 
     local default_addr_pool
     local advertise_addr
@@ -179,7 +179,7 @@ initialize_docker_swarm() {
 
 # Function to create a system user for Docker
 create_docker_user() {
-    echo -e "\n④ Docker service user"
+    echo -e "\n\033[1;36m④ Docker service user\033[0m"
 
     local docker_user="dockeruser"
 
@@ -219,7 +219,7 @@ create_docker_user() {
 
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
-    echo -e "\n⑤ Docker secrets"
+    echo -e "\n\033[1;36m⑤ Docker secrets\033[0m"
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "^[a-zA-Z0-9]{32}\$"
     set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
@@ -230,7 +230,7 @@ initialize_docker_secrets() {
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo -e "\n⑥ Docker environment variables"
+    echo -e "\n\033[1;36m⑥ Docker environment variables\033[0m"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
@@ -243,7 +243,7 @@ set_docker_environment_variables() {
 
 # Function to create the Docker network
 create_docker_network() {
-    echo -e "\n⑦ Docker network"
+    echo -e "\n\033[1;36m⑦ Docker network\033[0m"
 
     local docker_network="docker_network"
     

@@ -41,13 +41,13 @@ clean: stop
 # Print Docker environment status
 status:
 	@printf "\033[1;33mDocker environment status:\033[0m\n"
-	@printf "\n\033[1;33m· Stacks:\033[0m\n"
+	@printf "\n\033[1;36m· Stacks:\033[0m\n"
 	@docker stack ls
-	@printf "\n\033[1;33m· Services:\033[0m\n"
+	@printf "\n\033[1;36m· Services:\033[0m\n"
 	@docker service ls
-	@printf "\n\033[1;33m· Secrets:\033[0m\n"
+	@printf "\n\033[1;36m· Secrets:\033[0m\n"
 	@docker secret ls
-	@printf "\n\033[1;33m· Volumes:\033[0m\n"
+	@printf "\n\033[1;36m· Volumes:\033[0m\n"
 	@docker volume ls
-	@printf "\n\033[1;33m· Networks:\033[0m\n"
+	@printf "\n\033[1;36m· Networks:\033[0m\n"
 	@docker network ls
