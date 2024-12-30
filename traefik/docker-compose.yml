@@ -49,18 +49,9 @@ services:
         condition: on-failure
       labels:
         - "traefik.enable=true"
-        # - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`) && ((PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-        # - "traefik.http.routers.traefik.service=dashboard@internal"
-        # - "traefik.http.routers.traefik.middlewares=auth"
-        - "traefik.http.routers.traefik_dashboard.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.routers.traefik_dashboard.service=dashboard@internal"
-        - "traefik.http.routers.traefik_dashboard.middlewares=auth"
-        - "traefik.http.routers.traefik_api.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`) && PathPrefix(`/api`)"
-        - "traefik.http.routers.traefik_api.service=api@internal"
-        - "traefik.http.routers.traefik_api.middlewares=auth"
-        - "traefik.http.routers.traefik_metrics.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`) && PathPrefix(`/metrics`)"
-        - "traefik.http.routers.traefik_metrics.service=prometheus@internal"
-        - "traefik.http.routers.traefik_metrics.middlewares=auth"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`) && ((PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.middlewares=auth"
         - "traefik.http.middlewares.auth.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
 
 secrets:
