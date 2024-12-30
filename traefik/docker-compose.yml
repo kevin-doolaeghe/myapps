@@ -34,8 +34,8 @@ services:
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
       - DUCKDNS_PROPAGATION_TIMEOUT=120
-      #- DUCKDNS_POLLING_INTERVAL=30
-      #- DUCKDNS_TTL=200
+      - DUCKDNS_POLLING_INTERVAL=30
+      - DUCKDNS_TTL=200
     secrets:
       - duckdns_token
     volumes:
@@ -55,9 +55,9 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
-        #- "traefik.http.routers.traefik.service=api@internal"
-        #- "traefik.http.routers.traefik.middlewares=auth"
-        #- "traefik.http.middlewares.traefik.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.middlewares=auth"
+        - "traefik.http.middlewares.traefik.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
 secrets:
