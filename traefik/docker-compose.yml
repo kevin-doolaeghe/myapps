@@ -22,6 +22,7 @@ services:
       - "--entrypoints.websecure.http.tls.domains[0].sans=*.${TRAEFIK_DOMAIN_NAME:?error}"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=duckdns"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.disablepropagationcheck=true"
       # - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1,8.8.8.8"
       - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
@@ -30,7 +31,6 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      #- DUCKDNS_TOKEN=
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
     secrets:
       - duckdns_token
