@@ -53,7 +53,7 @@ services:
         - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.routers.traefik.middlewares=auth"
         - "traefik.http.middlewares.auth.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
-        - "traefik.http.services.traefik.loadbalancer.server.port=9999"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
 secrets:
   duckdns_token:
