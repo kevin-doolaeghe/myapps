@@ -6,8 +6,7 @@ services:
       - "--log.level=DEBUG" # to remove
       - "--global.checknewversion=true"
       - "--global.sendanonymoususage=false"
-      - "--api=true"
-      - "--api.insecure=false"
+      - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--metrics.prometheus"
       - "--providers.docker.swarmMode=true"
@@ -36,7 +35,7 @@ services:
       - duckdns_token
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik_data:/letsencrypt
+      - traefik_certs:/letsencrypt
     networks:
       - network
     deploy:
@@ -49,8 +48,7 @@ services:
         condition: on-failure
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`) && ((PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
-        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
         - "traefik.http.routers.traefik.middlewares=auth"
         - "traefik.http.middlewares.auth.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
@@ -60,7 +58,7 @@ secrets:
     external: true
 
 volumes:
-  traefik_data:
+  traefik_certs:
 
 networks:
   network:
