@@ -88,7 +88,7 @@ set_docker_secret() {
     local secret_value="$2"
 
     # Create the Docker secret
-    echo "$secret_value" | sudo docker secret create "$secret_name" - || {
+    printf "$secret_value" | sudo docker secret create "$secret_name" - || {
         echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create Docker secret '$secret_name'.\033[0m"
         exit 1
     }
