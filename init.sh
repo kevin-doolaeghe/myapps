@@ -222,14 +222,22 @@ initialize_docker_secrets() {
     echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets\033[0m"
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "[a-zA-Z0-9-]+"
-    set_docker_secret_with_prompt_and_regex "username" "Enter the username" "^[a-zA-Z0-9]{4,}\$"
+
+    if ! sudo docker secret ls | grep -w "username" > /dev/null 2>&1; then
+        username=$(read_with_regex "Enter the username" "^[a-zA-Z0-9]{4,}\$")
+        
+        set_docker_secret "username" "$username"
+        set_environment_variable "BASICAUTH_USERNAME" "$username"
+    fi
 
     if ! sudo docker secret ls | grep -w "password" > /dev/null 2>&1; then
         password=$(read_with_regex "Enter the password" "^[A-Za-z0-9@\$!%*?&]{6,}\$")
-        password_hash=$(docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw "$password" | grep -oP "PASSWORD_HASH='.*'" | sed "s/PASSWORD_HASH='//;s/'$//")
+        wireguard_password_hash=$(docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw "$password" | grep -oP "PASSWORD_HASH='.*'" | sed "s/PASSWORD_HASH='//;s/'$//")
+        basicauth_password_hash=$(docker run --rm --name apache httpd:alpine htpasswd -nb admin $password | cut -d: -f2)
 
         set_docker_secret "password" "$password"
-        set_environment_variable "WIREGUARD_PASSWORD_HASH" "$password_hash"
+        set_environment_variable "WIREGUARD_PASSWORD_HASH" "$wireguard_password_hash"
+        set_environment_variable "BASICAUTH_PASSWORD_HASH" "$basicauth_password_hash"
     fi
 
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"

@@ -2,11 +2,11 @@ services:
   pihole:
     image: pihole/pihole:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    secrets:
-      - password
     environment:
       - TZ=${TZ:?error}
       - WEBPASSWORD_FILE=/run/secrets/password
+    secrets:
+      - password
     volumes:
       - pihole_config:/etc/pihole
       - pihole_dnsmasq:/etc/dnsmasq.d
