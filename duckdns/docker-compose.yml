@@ -8,6 +8,8 @@ services:
       - LOG_FILE=false
     secrets:
       - duckdns_token
+    networks:
+      - network
     deploy:
       mode: replicated
       replicas: 1
@@ -19,4 +21,9 @@ services:
 
 secrets:
   duckdns_token:
+    external: true
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
     external: true
