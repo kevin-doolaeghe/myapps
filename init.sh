@@ -187,7 +187,7 @@ create_docker_user() {
     if ! id -u $docker_user > /dev/null 2>&1; then
         # Create a new user
         echo "Creating system user '$docker_user'..."
-        sudo useradd -m -s /bin/bash $docker_user || {
+        sudo useradd -r -M -N -s /bin/bash $docker_user || {
             echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create user '$docker_user'.\033[0m"
             exit 1
         }

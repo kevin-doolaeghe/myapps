@@ -121,34 +121,17 @@ $(tput sgr0)"
 sudo chmod +x /etc/update-motd.d/20-sysinfo
 ```
 
-### Setup Docker
+### Setup the Docker environment
 
-1. Install the latest version of `` :
+1. Clone this repository :
 ```
-curl -sSL https://get.docker.com | sh
-```
-
-2. Add the current user to the Docker group (avoids having to use the `docker` command with root privileges) :
-```
-sudo usermod -aG docker $USER
-```
-:warning: You need to reconnect for the instruction to take effect.
-
-3. Create a dedicated `docker` user and update its password :
-```
-sudo useradd -r -M -N -G docker docker
-sudo passwd docker
-```
-:memo: Note the `docker` user UID and `docker` group GID using the command `id docker`. 
-
-4. Verify that the installation is successful :
-```
-docker --version
+git clone https://github.com/kevin-doolaeghe/myapps.git
 ```
 
-5. Setup the Docker Swarm cluster :
+2. Setup the Docker environment :
 ```
-docker swarm init --default-addr-pool 10.10.0.0/16 --advertise-addr 10.0.0.252
+cd myapps/
+make
 ```
 
 ## Stacks
