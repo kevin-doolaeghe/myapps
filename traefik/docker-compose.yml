@@ -2,6 +2,8 @@ services:
   traefik:
     image: "traefik:v2.10"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    security-opt:
+      - no-new-privileges: true
     command:
       - "--log.level=DEBUG" # to remove
       - "--global.checknewversion=true"
