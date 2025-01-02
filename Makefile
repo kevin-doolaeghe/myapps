@@ -10,9 +10,9 @@ all: start
 # Initialize Docker environment
 init:
 	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m\n"
-	@export $(grep -v '^#' /etc/environment | xargs) 2>/dev/null
+	@export $(grep -v '^#' /etc/environment | xargs)
 	@bash init.sh
-	@export $(grep -v '^#' /etc/environment | xargs) 2>/dev/null
+	@export $(grep -v '^#' /etc/environment | xargs)
 	@echo $(WIREGUARD_DOMAIN_NAME)
 	@printf "\n\033[0;33m► Initialization completed successfully.\033[0m\n"
 
