@@ -8,18 +8,21 @@ services:
       - "--log.level=DEBUG" # to remove
       - "--global.checknewversion=true"
       - "--global.sendanonymoususage=false"
-      - "--api.insecure=true"
+      - "--api=true"
+      - "--api.insecure=false"
       - "--api.dashboard=true"
       - "--metrics.prometheus"
+      - "--providers.docker=true"
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.network=${DOCKER_NETWORK:?error}"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
+      - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.tls.domains[0].main=${TRAEFIK_DOMAIN_NAME:?error}"
       - "--entrypoints.websecure.http.tls.domains[0].sans=*.${TRAEFIK_DOMAIN_NAME:?error}"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=duckdns"
@@ -51,9 +54,10 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.routers.traefik.middlewares=auth"
         - "traefik.http.middlewares.auth.basicauth.users=${BASICAUTH_USERNAME:?error}:${BASICAUTH_PASSWORD_HASH:?error}"
-        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
 secrets:
   duckdns_token:
