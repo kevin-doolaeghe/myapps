@@ -2,6 +2,8 @@ services:
   agent:
     image: portainer/agent:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
@@ -18,6 +20,8 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    security_opt:
+      - no-new-privileges:true
     command: "-H tcp://tasks.agent:9001 --tlsskipverify"
     ports:
       - "8000:8000/tcp"

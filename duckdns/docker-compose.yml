@@ -2,6 +2,8 @@ services:
   duckdns:
     image: lscr.io/linuxserver/duckdns
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    security_opt:
+      - no-new-privileges:true
     environment:
       - SUBDOMAINS=${WIREGUARD_DOMAIN_NAME:?error}
       - FILE__TOKEN=/run/secrets/duckdns_token

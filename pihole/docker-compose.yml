@@ -2,6 +2,8 @@ services:
   pihole:
     image: pihole/pihole:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    security_opt:
+      - no-new-privileges:true
     environment:
       - TZ=${TZ:?error}
       - WEBPASSWORD_FILE=/run/secrets/password

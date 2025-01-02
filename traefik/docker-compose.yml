@@ -1,8 +1,8 @@
 services:
   traefik:
-    image: "traefik:v2.10"
+    image: "traefik:3.1"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    security-opt:
+    security_opt:
       - no-new-privileges:true
     command:
       - "--log.level=DEBUG" # to remove
