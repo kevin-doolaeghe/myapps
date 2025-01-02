@@ -11,10 +11,10 @@ all: start
 # Initialize Docker environment
 init:
 	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m\n"
-	@source /etc/environment
+	@. /etc/environment && export
 	@bash init.sh
-	@source /etc/environment
-	@echo $(WIREGUARD_DOMAIN_NAME)
+	@. /etc/environment && export
+	@echo "WIREGUARD_DOMAIN_NAME=$(WIREGUARD_DOMAIN_NAME)"
 	@printf "\n\033[0;33m► Initialization completed successfully.\033[0m\n"
 
 # Start Docker stacks
