@@ -58,8 +58,8 @@ set_environment_variable() {
         echo "Added $var_name to $env_file"
     fi
 
-    # Reload environment variables
-    reload_environment_variables
+    # Export for parent session
+    export "${var_name}=${var_value}"
 }
 
 # Function to set environment variable with command
