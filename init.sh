@@ -31,6 +31,14 @@ read_with_regex() {
     done
 }
 
+# Function to reload environment variables
+reload_environment_variables() {
+    # Reload environment variables
+    if [ -f /etc/environment ]; then
+        source /etc/environment
+    fi
+}
+
 # Function to set environment variable
 set_environment_variable() {
     local var_name="$1"
@@ -50,8 +58,8 @@ set_environment_variable() {
         echo "Added $var_name to $env_file"
     fi
 
-    # Export for current session
-    export "${var_name}=${var_value}"
+    # Reload environment variables
+    reload_environment_variables
 }
 
 # Function to set environment variable with command
@@ -282,6 +290,7 @@ create_docker_network() {
 
 # Main script execution
 check_permissions
+reload_environment_variables
 install_docker
 initialize_docker_swarm
 create_docker_user
