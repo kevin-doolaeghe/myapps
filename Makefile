@@ -1,6 +1,7 @@
 # Docker environment deployment Makefile
 
 # Makefile variables
+SHELL := /bin/bash
 STACKS := duckdns traefik portainer wireguard homepage
 
 .PHONY: all init start stop clean status
