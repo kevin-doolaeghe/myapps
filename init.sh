@@ -31,19 +31,10 @@ read_with_regex() {
     done
 }
 
-# Function to reload environment variables
-reload_environment_variables() {
-    # Reload environment variables
-    if [ -f /etc/environment ]; then
-        source /etc/environment
-    fi
-}
-
 # Function to set environment variable
 set_environment_variable() {
     local var_name="$1"
     local var_value="$2"
-    local env_file="/etc/environment"
 
     # Check if the variable is already in file
     if grep -Eq "^[^#]*\b${var_name}=" "$env_file"; then
@@ -290,7 +281,6 @@ create_docker_network() {
 
 # Main script execution
 check_permissions
-reload_environment_variables
 install_docker
 initialize_docker_swarm
 create_docker_user
