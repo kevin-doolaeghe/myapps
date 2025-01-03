@@ -287,7 +287,7 @@ create_docker_network() {
 # Function to ask the user to reboot the system if required
 reboot_system() {
     if [ "$g_reboot_required" = true ]; then
-        echo -e "\033[0;35m✗\033[0m \033[1;31mPlease reboot your system to apply the changes.\033[0m"
+        echo -e "\033[0;35m✗\033[0m \033[1;33mPlease reboot your system to apply the changes.\033[0m"
         exit 1
     fi
 }
