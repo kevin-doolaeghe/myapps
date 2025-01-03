@@ -1,6 +1,7 @@
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -15,11 +16,11 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.homepage.rule=Host(`${TRAEFIK_DOMAIN_NAME:?error}`) || Host(`homepage.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.routers.homepage.entrypoints=websecure"
         - "traefik.http.services.homepage.loadbalancer.server.port=3000"
 
 volumes:
   homepage_config:
+    name: homepage_config
 
 networks:
   network:

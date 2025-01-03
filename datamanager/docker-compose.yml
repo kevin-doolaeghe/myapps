@@ -1,6 +1,7 @@
 services:
   grafana:
     image: grafana/grafana:latest
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
@@ -19,10 +20,10 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.grafana.rule=Host(`grafana.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.routers.grafana.entrypoints=websecure"
         - "traefik.http.services.grafana.loadbalancer.server.port=3000"
   influxdb:
     image: influxdb:1.8
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - INFLUXDB_DB=${INFLUXDB_DB:-influxdb}
@@ -42,6 +43,7 @@ services:
           - node.role == manager
   telegraf:
     image: telegraf:latest
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - HOST_ETC=/hostfs/etc
@@ -71,8 +73,11 @@ services:
 
 volumes:
   grafana_data:
+    name: grafana_data
   influxdb_data:
+    name: influxdb_data
   telegraf_config:
+    name: telegraf_config
 
 networks:
   network:

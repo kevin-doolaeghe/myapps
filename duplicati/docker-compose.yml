@@ -1,6 +1,7 @@
 services:
   duplicati:
     image: duplicati/duplicati:latest
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
@@ -17,11 +18,11 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.duplicati.rule=Host(`duplicati.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.routers.duplicati.entrypoints=websecure"
         - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
 
 volumes:
   duplicati_data:
+    name: duplicati_data
 
 networks:
   network:

@@ -1,6 +1,7 @@
 services:
   pihole:
     image: pihole/pihole:latest
+    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - TZ=${TZ:?error}
@@ -25,7 +26,6 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.pihole.rule=Host(`pihole.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.routers.pihole.entrypoints=websecure"
         - "traefik.http.services.pihole.loadbalancer.server.port=80"
 
 secrets:
@@ -34,7 +34,9 @@ secrets:
 
 volumes:
   pihole_config:
+    name: pihole_config
   pihole_dnsmasq:
+    name: pihole_dnsmasq
 
 networks:
   network:
