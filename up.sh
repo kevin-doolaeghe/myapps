@@ -12,7 +12,7 @@ compose_file="$stack/docker-compose.yml"
 
 # Start the stack if the docker-compose.yml file exists
 if [[ -f "$compose_file" ]]; then
-    if docker stack deploy -c "$compose_file" --detach "$stack"; then
+    if docker stack deploy -c "$compose_file" -d "$stack"; then
         echo -e "\033[0;35m✓\033[0m \033[1;32mStarted $stack stack.\033[0m"
         exit 0
     else
