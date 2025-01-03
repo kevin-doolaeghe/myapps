@@ -1,5 +1,8 @@
 #!/bin/bash
 
+g_env_file="/etc/environment"
+g_reboot_required=false
+
 # Function to read input with regex validation
 read_with_regex() {
     local prompt="$1"
@@ -31,20 +34,11 @@ read_with_regex() {
     done
 }
 
-env_file="/etc/environment"
-
-# Function to reload environment variables
-reload_environment_variables() {
-    # Check if the file exists
-    if [ -f "$env_file" ]; then
-        source $env_file
-    fi
-}
-
 # Function to set environment variable
 set_environment_variable() {
     local var_name="$1"
     local var_value="$2"
+    local env_file="$g_env_file"
 
     # Check if the variable is already in file
     if grep -Eq "^[^#]*\b${var_name}=" "$env_file"; then
@@ -61,6 +55,7 @@ set_environment_variable() {
 
     # Export for parent session
     export "${var_name}=${var_value}"
+    g_reboot_required=true
 }
 
 # Function to set environment variable with command
@@ -289,12 +284,20 @@ create_docker_network() {
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
+# Function to ask the user to reboot the system if required
+reboot_system() {
+    if [ "$g_reboot_required" = true ]; then
+        echo -e "\033[0;35m✗\033[0m \033[1;31mPlease reboot your system to apply the changes.\033[0m"
+        exit 1
+    fi
+}
+
 # Main script execution
 check_permissions
-reload_environment_variables
 install_docker
 initialize_docker_swarm
 create_docker_user
 initialize_docker_secrets
 set_docker_environment_variables
 create_docker_network
+reboot_system

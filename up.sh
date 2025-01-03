@@ -10,13 +10,6 @@ fi
 stack="${1%/}"
 compose_file="$stack/docker-compose.yml"
 
-env_file="/etc/environment"
-
-# Check if the file exists
-if [ -f "$env_file" ]; then
-    source $env_file
-fi
-
 # Start the stack if the docker-compose.yml file exists
 if [[ -f "$compose_file" ]]; then
     if docker stack deploy -c "$compose_file" --detach "$stack"; then
