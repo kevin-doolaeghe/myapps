@@ -31,6 +31,16 @@ read_with_regex() {
     done
 }
 
+env_file="/etc/environment"
+
+# Function to reload environment variables
+reload_environment_variables() {
+    # Check if the file exists
+    if [ -f "$env_file" ]; then
+        source $env_file
+    fi
+}
+
 # Function to set environment variable
 set_environment_variable() {
     local var_name="$1"
@@ -281,6 +291,7 @@ create_docker_network() {
 
 # Main script execution
 check_permissions
+reload_environment_variables
 install_docker
 initialize_docker_swarm
 create_docker_user
