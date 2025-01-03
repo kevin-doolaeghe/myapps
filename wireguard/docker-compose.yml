@@ -4,6 +4,7 @@ services:
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
+      - WG_DEFAULT_DNS=10.0.0.254
       - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH:?error}
       - ENABLE_PROMETHEUS_METRICS=true
       - UI_TRAFFIC_STATS=true
@@ -16,6 +17,7 @@ services:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
     volumes:
+      - /lib/modules:/lib/modules
       - wireguard_config:/etc/wireguard
     ports:
       - "51820:51820/udp"
