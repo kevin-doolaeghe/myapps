@@ -4,8 +4,12 @@ services:
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
+      - WG_DEVICE=wlan0
       - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH:?error}
       - ENABLE_PROMETHEUS_METRICS=true
+      - UI_TRAFFIC_STATS=true
+      - UI_CHART_TYPE=1
+      - UI_ENABLE_SORT_CLIENTS=true
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
