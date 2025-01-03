@@ -15,10 +15,7 @@ services:
     volumes:
       - wireguard_config:/etc/wireguard
     ports:
-      - target: 51820
-        published: 51820
-        protocol: udp
-        mode: bridge
+      - "51820:51820/udp"
     networks:
       - network
     deploy:

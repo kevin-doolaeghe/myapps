@@ -26,14 +26,8 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.email=${DUCKDNS_EMAIL:?error}"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=duckdns"
     ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: bridge
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: bridge
+      - "80:80/tcp"
+      - "443:443/tcp"
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
       - DUCKDNS_PROPAGATION_TIMEOUT=120
