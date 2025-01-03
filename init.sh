@@ -1,6 +1,8 @@
 #!/bin/bash
 
 g_env_file="/etc/environment"
+g_docker_user="dockeruser"
+
 g_reboot_required=false
 
 # Function to read input with regex validation
@@ -185,7 +187,7 @@ initialize_docker_swarm() {
 create_docker_user() {
     echo -e "\033[0;36m④\033[0m \033[1;36mDocker service user\033[0m"
 
-    local docker_user="dockeruser"
+    local docker_user="$g_docker_user"
 
     # Check if the system user exists
     if ! id -u $docker_user > /dev/null 2>&1; then
@@ -224,6 +226,11 @@ create_docker_user() {
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
     echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets\033[0m"
+
+    local username
+    local password
+    local wireguard_password_hash
+    local basicauth_password_hash
 
     set_docker_secret_with_prompt_and_regex "duckdns_token" "Enter the Duck DNS token" "[a-zA-Z0-9-]+"
 
@@ -287,7 +294,12 @@ create_docker_network() {
 # Function to ask the user to reboot the system if required
 reboot_system() {
     if [ "$g_reboot_required" = true ]; then
-        echo -e "\033[0;35m✗\033[0m \033[1;33mPlease reboot your system to apply the changes.\033[0m"
+        echo -e "\033[0;33mYou need to restart the system to apply the changes.\033[0m"
+        read -p "Do you want to reboot now? [y/N]: " answer
+        if [[ $answer =~ ^[Yy]$ ]]; then
+            sudo reboot
+        fi
+        echo -e "\033[0;35m✗\033[0m \033[1;33mPlease reboot your system before restarting the installation process.\033[0m"
         exit 1
     fi
 }
