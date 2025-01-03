@@ -12,7 +12,9 @@ services:
       - pihole_config:/etc/pihole
       - pihole_dnsmasq:/etc/dnsmasq.d
     ports:
-      - "53:53"
+      - target: 53
+        published: 53
+        mode: host
     networks:
       - network
     deploy:

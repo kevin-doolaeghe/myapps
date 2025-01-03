@@ -22,7 +22,10 @@ services:
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     command: "-H tcp://tasks.agent:9001 --tlsskipverify"
     ports:
-      - "8000:8000/tcp"
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host
     volumes:
       - portainer_data:/data
     networks:
