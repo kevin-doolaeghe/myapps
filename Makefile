@@ -11,15 +11,14 @@ all: start
 # Initialize Docker environment
 init:
 	@printf "\033[0;33mⓘ\033[0m \033[1;33mInitializing Docker environment...\033[0m\n"
-	@. init.sh
-	@echo "WIREGUARD_DOMAIN_NAME=${WIREGUARD_DOMAIN_NAME}"
+	@bash init.sh
 	@printf "\n\033[0;33m► Initialization completed successfully.\033[0m\n"
 
 # Start Docker stacks
 start: init
 	@printf "\n\033[0;33mⓘ\033[0m \033[1;33mStarting Docker stacks...\033[0m\n"
 	@for stack in $(STACKS); do \
-		. up.sh $$stack; \
+		bash up.sh $$stack; \
 	done
 	@printf "\n\033[0;33m► Starting completed successfully.\033[0m\n"
 
@@ -27,7 +26,7 @@ start: init
 stop:
 	@printf "\033[0;33mⓘ\033[0m \033[1;33mStopping Docker stacks...\033[0m\n"
 	@for stack in $(STACKS); do \
-		. down.sh $$stack; \
+		bash down.sh $$stack; \
 	done
 	@printf "\n\033[0;33m► Stopping completed successfully.\033[0m\n"
 
