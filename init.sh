@@ -48,6 +48,8 @@ set_environment_variable() {
         if [ "$(sudo grep -E "^[^#]*\b${var_name}=" "$env_file" | cut -d'=' -f2-)" != "$var_value" ]; then
             sudo sed -i "s#^${var_name}=.*#${var_name}=${var_value}#" "$env_file"
             echo "Updated $var_name in $env_file"
+        else
+            return
         fi
     else
         # Append the new variable
@@ -298,6 +300,7 @@ reboot_system() {
         read -p "Do you want to reboot now? [y/N]: " answer
         if [[ $answer =~ ^[Yy]$ ]]; then
             sudo reboot
+            exit 0
         fi
         echo -e "\033[0;35m✗\033[0m \033[1;33mPlease reboot your system before restarting the installation process.\033[0m"
         exit 1
