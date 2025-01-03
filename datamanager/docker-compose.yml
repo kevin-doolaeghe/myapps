@@ -1,7 +1,6 @@
 services:
   grafana:
     image: grafana/grafana:latest
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
@@ -23,7 +22,6 @@ services:
         - "traefik.http.services.grafana.loadbalancer.server.port=3000"
   influxdb:
     image: influxdb:1.8
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - INFLUXDB_DB=${INFLUXDB_DB:-influxdb}
@@ -43,7 +41,6 @@ services:
           - node.role == manager
   telegraf:
     image: telegraf:latest
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - HOST_ETC=/hostfs/etc

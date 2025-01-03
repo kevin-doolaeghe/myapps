@@ -1,7 +1,6 @@
 services:
   duplicati:
     image: duplicati/duplicati:latest
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}

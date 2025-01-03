@@ -1,7 +1,6 @@
 services:
   pihole:
     image: pihole/pihole:latest
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - TZ=${TZ:?error}
@@ -12,9 +11,7 @@ services:
       - pihole_config:/etc/pihole
       - pihole_dnsmasq:/etc/dnsmasq.d
     ports:
-      - target: 53
-        published: 53
-        mode: host
+      - "53:53"
     networks:
       - network
     deploy:

@@ -1,7 +1,6 @@
 services:
   traefik:
     image: "traefik:3.2"
-    hostname: "{{.Node.Hostname}}"
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     command:
       - "--global.checknewversion=true"
@@ -30,11 +29,11 @@ services:
       - target: 80
         published: 80
         protocol: tcp
-        mode: host
+        mode: bridge
       - target: 443
         published: 443
         protocol: tcp
-        mode: host
+        mode: bridge
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
       - DUCKDNS_PROPAGATION_TIMEOUT=120
