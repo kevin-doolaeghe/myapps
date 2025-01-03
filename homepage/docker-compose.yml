@@ -2,8 +2,6 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    security_opt:
-      - no-new-privileges:true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - homepage_config:/app/config

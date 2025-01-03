@@ -2,8 +2,6 @@ services:
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    # security_opt:
-    #   - no-new-privileges:true
     environment:
       - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
       - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH:?error}
