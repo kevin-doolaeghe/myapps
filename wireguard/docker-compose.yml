@@ -15,7 +15,7 @@ services:
     volumes:
       - wireguard_config:/etc/wireguard
     ports:
-      - "51820:51820/udp"
+      - "51820:51820"
     networks:
       - network
     deploy:
