@@ -14,9 +14,9 @@ services:
       - "--providers.swarm.exposedbydefault=false"
       - "--providers.swarm.network=${DOCKER_NETWORK:?error}"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.asdefault=true"
       - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
       - "--entrypoints.websecure.http.tls.domains[0].main=${TRAEFIK_DOMAIN_NAME:?error}"
@@ -26,8 +26,14 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.email=${DUCKDNS_EMAIL:?error}"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=duckdns"
     ports:
-      - "80:80/tcp"
-      - "443:443/tcp"
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
     environment:
       - DUCKDNS_TOKEN_FILE=/run/secrets/duckdns_token
       - DUCKDNS_PROPAGATION_TIMEOUT=120
@@ -41,8 +47,7 @@ services:
     networks:
       - network
     deploy:
-      mode: replicated
-      replicas: 1
+      mode: global
       placement:
         constraints:
           - node.role == manager
