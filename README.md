@@ -37,6 +37,7 @@ sudo nano /etc/NetworkManager/system-connections/wlan0.nmconnection
 [connection]
 id=wlan0
 ```
+:memo: The `uuid` field of the connection is given using the command `nmcli con show`.
 
 * Update the `ipv4` section to configure static network settings :
 ```

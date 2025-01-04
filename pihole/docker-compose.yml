@@ -11,10 +11,7 @@ services:
       - pihole_config:/etc/pihole
       - pihole_dnsmasq:/etc/dnsmasq.d
     ports:
-      - target: 53
-        published: 53
-        protocol: udp
-        mode: host
+      - 53:53/udp
     networks:
       - network
     deploy:
