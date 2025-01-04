@@ -4,10 +4,11 @@ services:
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
       - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
+      - WG_DEFAULT_ADDRESS=192.168.222.x
       - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH:?error}
       - ENABLE_PROMETHEUS_METRICS=true
       - UI_TRAFFIC_STATS=true
-      - UI_CHART_TYPE=1
+      - UI_CHART_TYPE=2
       - UI_ENABLE_SORT_CLIENTS=true
     sysctls:
       - net.ipv4.ip_forward=1
