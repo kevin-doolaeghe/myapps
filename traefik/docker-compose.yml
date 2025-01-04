@@ -21,7 +21,7 @@ services:
       - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
       - "--entrypoints.websecure.http.tls.domains[0].main=${TRAEFIK_DOMAIN_NAME:?error}"
       - "--entrypoints.websecure.http.tls.domains[0].sans=*.${TRAEFIK_DOMAIN_NAME:?error}"
-      - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # To remove
+      # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # To remove
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.email=${DUCKDNS_EMAIL:?error}"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=duckdns"
