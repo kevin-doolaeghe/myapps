@@ -171,7 +171,7 @@ initialize_docker_swarm() {
         echo "Docker Swarm is not initialized. Initializing Docker Swarm..."
 
         # Read the default address pool and advertise address for Docker Swarm
-        default_addr_pool=$(read_with_regex "Enter the default address pool" "^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\$" "10.10.0.0/16")
+        default_addr_pool=$(read_with_regex "Enter the default address pool" "^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\$" "172.18.0.0/16")
         advertise_addr=$(read_with_regex "Enter the advertise address" "^([0-9]{1,3}\.){3}[0-9]{1,3}\$" "10.0.0.252")
 
         # Initialize Docker Swarm
@@ -297,8 +297,8 @@ create_docker_network() {
 reboot_system() {
     if [ "$g_reboot_required" = true ]; then
         echo -e "\033[0;33mYou need to restart the system to apply the changes.\033[0m"
-        read -p "Do you want to reboot now? [y/N]: " answer
-        if [[ $answer =~ ^[Yy]$ ]]; then
+        answer=$(read_with_regex "Do you want to reboot now? [Y/n]" "^[yYnN]$" "Y")
+        if [[ $answer =~ ^[yY]$ ]]; then
             sudo reboot
             exit 0
         fi
