@@ -5,6 +5,7 @@ services:
     environment:
       - WG_HOST=${WIREGUARD_DOMAIN_NAME:?error}
       - WG_DEFAULT_ADDRESS=192.168.222.x
+      - WG_DEVICE=wlan0
       - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH:?error}
       - ENABLE_PROMETHEUS_METRICS=true
       - UI_TRAFFIC_STATS=true
