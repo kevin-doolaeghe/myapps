@@ -187,7 +187,7 @@ initialize_docker_swarm() {
 
 # Function to create a system user for Docker
 create_docker_user() {
-    echo -e "\033[0;36m④\033[0m \033[1;36mDocker service user\033[0m"
+    echo -e "\033[0;36m④\033[0m \033[1;36mDocker service user setup\033[0m"
 
     local docker_user="$g_docker_user"
 
@@ -227,7 +227,7 @@ create_docker_user() {
 
 # Function to initialize Docker secrets
 initialize_docker_secrets() {
-    echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets\033[0m"
+    echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets setup\033[0m"
 
     local username
     local password
@@ -258,7 +258,7 @@ initialize_docker_secrets() {
 
 # Function to set environment variables for Docker
 set_docker_environment_variables() {
-    echo -e "\033[0;36m⑥\033[0m \033[1;36mDocker environment variables\033[0m"
+    echo -e "\033[0;36m⑥\033[0m \033[1;36mDocker environment variables setup\033[0m"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
 
@@ -271,7 +271,7 @@ set_docker_environment_variables() {
 
 # Function to create the Docker network
 create_docker_network() {
-    echo -e "\033[0;36m⑦\033[0m \033[1;36mDocker network\033[0m"
+    echo -e "\033[0;36m⑦\033[0m \033[1;36mDocker network setup\033[0m"
 
     local docker_network="docker_network"
     
