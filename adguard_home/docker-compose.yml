@@ -1,0 +1,33 @@
+services:
+  adguard_home:
+    image: adguard/adguardhome:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 853:853/tcp
+    volumes:
+      - work:/opt/adguardhome/work
+      - config:/opt/adguardhome/conf
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.adguardhome.rule=Host(`adguardhome.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.adguardhome.loadbalancer.server.port=3000"
+
+volumes:
+  work:
+    name: adguard_home_work
+  config:
+    name: adguard_home_config
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

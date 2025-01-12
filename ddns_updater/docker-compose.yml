@@ -1,0 +1,22 @@
+services:
+  ddns_updater:
+    image: qmcgaw/ddns-updater:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    environment:
+      - CONFIG=${DDNS_UPDATER_CONFIG:?error}
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.ddnsupdater.rule=Host(`ddnsupdater.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.ddnsupdater.loadbalancer.server.port=8000"
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

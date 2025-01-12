@@ -1,10 +1,9 @@
 services:
-  duplicati:
-    image: duplicati/duplicati:latest
+  node_red:
+    image: nodered/node-red:latest
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     environment:
-      - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_ENCRYPTION_KEY:-admin}
-      - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI_PASSWORD:-admin}
+      - TZ=${DOCKER_TZ:?error}
     volumes:
       - data:/data
     networks:
@@ -16,12 +15,12 @@ services:
         condition: on-failure
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.duplicati.rule=Host(`duplicati.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
+        - "traefik.http.routers.nodered.rule=Host(`nodered.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.nodered.loadbalancer.server.port=1880"
 
 volumes:
   data:
-    name: duplicati_data
+    name: node_red_data
 
 networks:
   network:

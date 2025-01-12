@@ -1,0 +1,20 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.prometheus.rule=Host(`prometheus.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

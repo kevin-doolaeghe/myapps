@@ -135,40 +135,6 @@ cd myapps/
 make
 ```
 
-## Stacks
-
-Reverse-proxy :
-* [Nginx Proxy Manager](https://github.com/NginxProxyManager/nginx-proxy-manager)
-* [Traefik](https://github.com/traefik/traefik)
-* [Caddy](https://github.com/caddyserver/caddy)
-
-VPN :
-* [OpenVPN](https://github.com/kylemanna/docker-openvpn)
-* [Wireguard](https://github.com/wg-easy/wg-easy)
-
-Docker orchestrator :
-* [Portainer](https://github.com/portainer/portainer)
-
-Backups management :
-* [Duplicati](https://github.com/duplicati/duplicati)
-
-Dashboards :
-* [Dashy](https://github.com/Lissy93/dashy)
-* [Homepage](https://github.com/gethomepage/homepage)
-
-Ad-blocker :
-* [Pi-Hole](https://github.com/pi-hole/pi-hole/)
-* [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome)
-
-DDNS service :
-* [Duck DNS](https://hub.docker.com/r/linuxserver/duckdns)
-
-Password management :
-* [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
-
-Home automation :
-* [Home Assistant](https://github.com/home-assistant/core)
-
 ## References
 
 * [Raspberry Pi OS website](https://www.raspberrypi.com/software/)

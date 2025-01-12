@@ -1,0 +1,31 @@
+services:
+  grafana:
+    image: grafana/grafana:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_INSTALL_PLUGINS=
+    volumes:
+      - config:/var/lib/grafana
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.grafana.rule=Host(`grafana.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+volumes:
+  config:
+    name: grafana_config
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

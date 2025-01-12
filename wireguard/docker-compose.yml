@@ -17,7 +17,7 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     volumes:
-      - wireguard_config:/etc/wireguard
+      - config:/etc/wireguard
     ports:
       - 51820:51820/udp
     networks:
@@ -36,7 +36,7 @@ services:
         - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
 
 volumes:
-  wireguard_config:
+  config:
     name: wireguard_config
 
 networks:

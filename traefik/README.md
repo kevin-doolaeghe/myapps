@@ -1,4 +1,4 @@
-# Traefik reverse-proxy
+# Traefik - Reverse-proxy
 
 :triangular_flag_on_post: Setup the **Traefik** reverse-proxy stack.
 
@@ -12,10 +12,10 @@
 sudo docker stack deploy -c docker-compose.yml traefik
 ```
 
-:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
+:warning: This program require a Docker instance **with Swarm mode** enabled to be executed.
 
 ## References
 
-* [Traefik website](https://traefik.io/)
-* [Traefik repository on Github](https://github.com/traefik/traefik)
-* [Traefik image on Docker Hub](https://hub.docker.com/_/traefik)
+* [Offical website](https://traefik.io/)
+* [GitHub repository](https://github.com/traefik/traefik)
+* [Docker Hub image](https://hub.docker.com/_/traefik)

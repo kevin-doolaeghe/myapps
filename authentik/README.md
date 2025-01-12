@@ -1,6 +1,6 @@
-# Authentik
+# Authentik - Authentication management
 
-:triangular_flag_on_post: Setup the **Authentik** stack.
+:triangular_flag_on_post: Setup the **Authentik** authentication management stack.
 
 ## Author
 
@@ -12,9 +12,9 @@
 sudo docker stack deploy -c docker-compose.yml authentik
 ```
 
-:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
+:warning: This program require a Docker instance **with Swarm mode** enabled to be executed.
 
 ## References
 
-* [Authentik website](https://goauthentik.io/)
-* [Authentik repository on Github](https://github.com/goauthentik/authentik)
+* [Official website](https://goauthentik.io/)
+* [GitHub repository](https://github.com/goauthentik/authentik)

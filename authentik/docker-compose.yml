@@ -1,51 +1,17 @@
 services:
-  postgresql:
-    image: docker.io/library/postgres:16-alpine
-    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    volumes:
-      - database:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
-      POSTGRES_USER: ${PG_USER:-authentik}
-      POSTGRES_DB: ${PG_DB:-authentik}
-    networks:
-      - network
-    deploy:
-      mode: replicated
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-  redis:
-    image: docker.io/library/redis:alpine
-    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
-    command: --save 60 1 --loglevel warning
-    volumes:
-      - redis:/data
-    networks:
-      - network
-    deploy:
-      mode: replicated
-      replicas: 1
-      restart_policy:
-        condition: on-failure
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.1}
+    image: ghcr.io/goauthentik/server:2024.12.1
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     command: server
     environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-    volumes:
-      - ./media:/media
-      - ./custom-templates:/templates
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      AUTHENTIK_SECRET_KEY: /run/secrets/password
+      AUTHENTIK_REDIS__HOST: authentik_cache
+      AUTHENTIK_POSTGRESQL__HOST: authentik_database
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRESQL_DATABASE:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRESQL_USERNAME:-admin}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRESQL_PASSWORD:-admin}
+    secrets:
+      - password
     networks:
       - network
     deploy:
@@ -56,27 +22,51 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.authentik.rule=Host(`authentik.${TRAEFIK_DOMAIN_NAME:?error}`)"
-        - "traefik.http.services.authentik.loadbalancer.server.port=9443"
+        - "traefik.http.services.authentik.loadbalancer.server.port=9000"
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.1}
+    image: ghcr.io/goauthentik/server:2024.12.1
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     command: worker
     environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_SECRET_KEY: /run/secrets/password
+      AUTHENTIK_REDIS__HOST: authentik_cache
+      AUTHENTIK_POSTGRESQL__HOST: authentik_database
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRESQL_DATABASE:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRESQL_USERNAME:-admin}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRESQL_PASSWORD:-admin}
+    secrets:
+      - password
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./media:/media
-      - ./certs:/certs
-      - ./custom-templates:/templates
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+  database:
+    image: postgres:16-alpine
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${AUTHENTIK_POSTGRESQL_DATABASE:-authentik}
+      POSTGRES_USER: ${AUTHENTIK_POSTGRESQL_USERNAME:-admin}
+      POSTGRES_PASSWORD: ${AUTHENTIK_POSTGRESQL_PASSWORD:-admin}
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+  cache:
+    image: redis:alpine
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    command:
+      - "--save 60 1"
+      - "--loglevel warning"
     networks:
       - network
     deploy:
@@ -85,13 +75,13 @@ services:
       restart_policy:
         condition: on-failure
 
+secrets:
+  password:
+    external: true
+
 volumes:
-  database:
+  data:
     name: authentik_data
-    driver: local
-  redis:
-    name: authentik_cache
-    driver: local
 
 networks:
   network:

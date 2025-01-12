@@ -4,7 +4,7 @@ services:
     user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - homepage_config:/app/config
+      - config:/app/config
     networks:
       - network
     deploy:
@@ -18,7 +18,7 @@ services:
         - "traefik.http.services.homepage.loadbalancer.server.port=3000"
 
 volumes:
-  homepage_config:
+  config:
     name: homepage_config
 
 networks:

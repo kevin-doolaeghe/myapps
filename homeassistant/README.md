@@ -1,6 +1,6 @@
-# Home Assistant
+# Home Assistant - Automation
 
-:triangular_flag_on_post: Setup the **Home Assistant** stack.
+:triangular_flag_on_post: Setup the **Home Assistant** automation stack.
 
 ## Author
 
@@ -9,19 +9,12 @@
 ## Setup
 
 ```
-sudo docker stack deploy -c docker-compose.yml homeassistant
+sudo docker stack deploy -c docker-compose.yml home_assistant
 ```
 
-:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
-
-## Web access
-
-Home Assistant's web interface is accessible via port `8123`.
+:warning: This program require a Docker instance **with Swarm mode** enabled to be executed.
 
 ## References
 
-* [Home Assistant website](https://www.home-assistant.io/)
-* [Home Assistant repository on Github](https://github.com/home-assistant/core)
-* [Home Assistant - Docker Installation](https://www.home-assistant.io/installation/linux#docker-compose)
-* [Home Assistant - Tuya Integration](https://www.home-assistant.io/integrations/tuya/)
-* [Home Assistant - InfluxDB Integration](https://www.home-assistant.io/integrations/influxdb)
+* [Official website](https://www.home-assistant.io/)
+* [GitHub repository](https://github.com/home-assistant/core)

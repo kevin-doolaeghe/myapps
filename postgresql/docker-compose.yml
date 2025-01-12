@@ -1,0 +1,26 @@
+services:
+  postgresql:
+    image: postgres:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    environment:
+      - POSTGRES_DB=${AUTHENTIK_POSTGRESQL_DATABASE:-database}
+      - POSTGRES_USER=${AUTHENTIK_POSTGRESQL_USERNAME:-admin}
+      - POSTGRES_PASSWORD=${AUTHENTIK_POSTGRESQL_PASSWORD:-admin}
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  data:
+    name: postgresql_data
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

@@ -1,4 +1,4 @@
-# Homepage dashboard
+# Homepage - Dashboard
 
 :triangular_flag_on_post: Setup **Homepage** dashboard stack.
 
@@ -12,13 +12,9 @@
 sudo docker stack deploy -c docker-compose.yml homepage
 ```
 
-:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
-
-## Web access
-
-Homepage's web interface is accessible via port `3000`.
+:warning: This program require a Docker instance **with Swarm mode** enabled to be executed.
 
 ## References
 
-* [Homepage website](https://gethomepage.dev/)
-* [Homepage repository on Github](https://github.com/gethomepage/homepage)
+* [Official website](https://gethomepage.dev/)
+* [GitHub repository](https://github.com/gethomepage/homepage)

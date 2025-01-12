@@ -1,0 +1,61 @@
+services:
+  server:
+    image: guacamole/guacd:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    volumes:
+      - drive:/drive:rw
+      - record:/record:rw
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+  worker:
+    image: guacamole/guacamole:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    environment:
+      - GUACD_HOSTNAME=guacamole_server
+      - MYSQL_HOSTNAME=guacamole_database
+      - MYSQL_DATABASE=${GUACAMOLE_MARIADB_DATABASE:-guacamole}
+      - MYSQL_USER=${GUACAMOLE_MARIADB_USERNAME:-admin}
+      - MYSQL_PASSWORD=${GUACAMOLE_MARIADB_PASSWORD:-admin}
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.guacamole.rule=Host(`guacamole.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.guacamole.loadbalancer.server.port=8080"
+  database:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${GUACAMOLE_MARIADB_ROOT_PASSWORD:-admin}
+      - MYSQL_DATABASE=${GUACAMOLE_MARIADB_DATABASE:-guacamole}
+      - MYSQL_USER=${GUACAMOLE_MARIADB_USERNAME:-admin}
+      - MYSQL_PASSWORD=${GUACAMOLE_MARIADB_PASSWORD:-admin}
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  drive:
+    name: guacamole_drive
+  record:
+    name: guacamole_record
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

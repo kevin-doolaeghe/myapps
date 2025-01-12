@@ -1,6 +1,6 @@
-# Portainer
+# Portainer - Container management
 
-:triangular_flag_on_post: Setup the **Portainer** stack.
+:triangular_flag_on_post: Setup the **Portainer** container management stack.
 
 ## Author
 
@@ -12,18 +12,10 @@
 sudo docker stack deploy -c docker-compose.yml portainer
 ```
 
-:warning: This program require a Docker instance **with Swarm** mode enabled to be executed.
-
-## Web access
-
-Portainer's web interface is accessible via port `9443` (HTTPS).
-
-:key: Default credentials :
-* Email address : `admin`
-* Password : :no_entry_sign:
+:warning: This program require a Docker instance **with Swarm mode** enabled to be executed.
 
 ## References
 
-* [Portainer website](https://www.portainer.io/)
-* [Portainer repository on Github](https://github.com/portainer/portainer)
-* [Portainer image on Docker Hub](https://hub.docker.com/r/portainer/portainer)
+* [Official website](https://www.portainer.io/)
+* [GitHub repository](https://github.com/portainer/portainer)
+* [Docker Hub image](https://hub.docker.com/r/portainer/portainer)

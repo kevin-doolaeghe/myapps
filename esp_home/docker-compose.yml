@@ -1,0 +1,32 @@
+services:
+  esp_home:
+    image: ghcr.io/esphome/esphome:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    privileged: true
+    environment:
+      - ESPHOME_DASHBOARD_USE_PING=true
+      - USERNAME=${ESP_HOME_USERNAME:-admin}
+      - PASSWORD=${ESP_HOME_PASSWORD:-admin}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - config:/config
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.esphome.rule=Host(`esphome.${TRAEFIK_DOMAIN_NAME:?error}`)"
+        - "traefik.http.services.esphome.loadbalancer.server.port=6052"
+
+volumes:
+  config:
+    name: esp_home_config
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true
