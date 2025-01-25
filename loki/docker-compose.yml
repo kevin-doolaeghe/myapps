@@ -1,0 +1,29 @@
+services:
+  loki:
+    image: grafana/loki:latest
+    user: "${DOCKER_PUID:-0}:${DOCKER_PGID:-0}"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - network
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+
+networks:
+  network:
+    name: ${DOCKER_NETWORK:?error}
+    external: true

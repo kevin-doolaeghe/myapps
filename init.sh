@@ -2,6 +2,7 @@
 
 g_env_file="/etc/environment"
 g_docker_user="dockeruser"
+g_docker_network="docker_network"
 
 g_reboot_required=false
 
@@ -225,9 +226,33 @@ create_docker_user() {
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
-# Function to initialize Docker secrets
-initialize_docker_secrets() {
-    echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker secrets setup\033[0m"
+# Function to create the Docker network
+create_docker_network() {
+    echo -e "\033[0;36m⑤\033[0m \033[1;36mDocker network setup\033[0m"
+
+    local docker_network="$g_docker_network"
+    
+    # Check if the Docker network exists
+    if ! sudo docker network inspect $docker_network > /dev/null 2>&1; then
+        # Create the Docker network
+        echo "Creating $docker_network network..."
+        sudo docker network create --driver overlay --attachable $docker_network || {
+            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create Docker network '$docker_network'.\033[0m"
+            exit 1
+        }
+        echo "$docker_network network created."
+
+        # Set the 'DOCKER_NETWORK' environment variable
+        echo "Updating DOCKER_NETWORK environment variable..."
+        set_environment_variable "DOCKER_NETWORK" "$docker_network"
+    fi
+
+    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
+}
+
+# Function to configure Docker apps
+configure_docker_apps() {
+    echo -e "\033[0;36m⑥\033[0m \033[1;36mDocker secrets setup\033[0m"
 
     local username
     local password
@@ -253,11 +278,6 @@ initialize_docker_secrets() {
         set_environment_variable "BASICAUTH_PASSWORD_HASH" "$basicauth_password_hash"
     fi
 
-    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
-}
-
-# Function to set environment variables for Docker
-set_docker_environment_variables() {
     echo -e "\033[0;36m⑥\033[0m \033[1;36mDocker environment variables setup\033[0m"
 
     set_environment_variable_with_command "DOCKER_TZ" "$(cat /etc/timezone 2>/dev/null || timedatectl | grep "Time zone" | awk '{print $3}')"
@@ -269,32 +289,8 @@ set_docker_environment_variables() {
     echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
 }
 
-# Function to create the Docker network
-create_docker_network() {
-    echo -e "\033[0;36m⑦\033[0m \033[1;36mDocker network setup\033[0m"
-
-    local docker_network="docker_network"
-    
-    # Check if the Docker network exists
-    if ! sudo docker network inspect $docker_network > /dev/null 2>&1; then
-        # Create the Docker network
-        echo "Creating $docker_network network..."
-        sudo docker network create --driver overlay --attachable $docker_network || {
-            echo -e "\033[0;35m✗\033[0m \033[1;31mFailed to create Docker network '$docker_network'.\033[0m"
-            exit 1
-        }
-        echo "$docker_network network created."
-
-        # Set the 'DOCKER_NETWORK' environment variable
-        echo "Updating DOCKER_NETWORK environment variable..."
-        set_environment_variable "DOCKER_NETWORK" "$docker_network"
-    fi
-
-    echo -e "\033[0;35m✓\033[0m \033[1;32mTask completed successfully.\033[0m"
-}
-
 # Function to ask the user to reboot the system if required
-reboot_system() {
+reboot_system_if_needed() {
     if [ "$g_reboot_required" = true ]; then
         echo -e "\033[0;33mYou need to restart the system to apply the changes.\033[0m"
         answer=$(read_with_regex "Do you want to reboot now? [Y/n]" "^[yYnN]$" "Y")
@@ -312,7 +308,8 @@ check_permissions
 install_docker
 initialize_docker_swarm
 create_docker_user
+configure_docker_apps
 initialize_docker_secrets
 set_docker_environment_variables
 create_docker_network
-reboot_system
+reboot_system_if_needed

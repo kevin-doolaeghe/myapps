@@ -2,7 +2,7 @@
 
 # Makefile variables
 SHELL := /bin/bash
-STACKS := duckdns traefik portainer wireguard homepage
+STACKS := ddns_updater traefik portainer authentik wireguard homepage
 
 .PHONY: all init start stop clean status
 
